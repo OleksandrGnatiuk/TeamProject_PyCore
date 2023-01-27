@@ -112,11 +112,13 @@ class Record:
 
     """Робота з датою народження"""
     def add_birthday(self, birthday):
+        """Adding date of birth"""
         birthday = Birthday(birthday)
         self.birthday = birthday
         print("Date of birth was added")
 
     def delete_birthday(self, old_birthday):
+        """Delete date of birth"""
         old_birthday = Birthday(old_birthday)
         if self.birthday.value == old_birthday.value:
             self.birthday = None
@@ -125,6 +127,7 @@ class Record:
             print("such a date does not exist")
 
     def days_to_birthday(self):
+        """How many days until user's birthday"""
         if self.birthday.value:
             try:
                 birthday_value = datetime.strptime(self.birthday.value, '%d/%m/%Y').date()
@@ -180,7 +183,7 @@ class AddressBook(UserDict):
         print("Record was deleted")
 
     def get_birthdays_per_week(self, range_of_days=7):
-
+        """a list of users who have a birthday coming up soon"""
         current_date = datetime.now().date()
         for name, value in self.data.items():
             user_name = name
