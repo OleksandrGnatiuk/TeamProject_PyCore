@@ -113,7 +113,7 @@ class Notebook:
         for id_, value in self.notes.items():
             tgs = [tg.word.lower() for tg in value.tags]
             if len(tgs) == 0:
-                tgs = ['']
+                tgs = [""]
             if tag_to_search.lower().strip() in tgs:
                 tags = ", ".join(tgs)
                 result = f"id: {id_}    date: {value.date} \n{value.note}\ntags: {tags} \n========\n "
@@ -132,4 +132,3 @@ if file.exists():
             nb.counter = max(ids)
         else:
             nb.counter = 0
-
