@@ -1,4 +1,8 @@
 from collections import UserDict
+from datetime import datetime, timedelta
+import pickle
+from pathlib import Path
+import re
 
 
 class Field:
@@ -37,7 +41,7 @@ class Email(Field):
 
 
 class Record:
-    def __init__(self, name, phone, email=None, birthday=None):
+    def __init__(self, name, phone=None, email=None, birthday=None):
         self.name = name
         self.birthday = birthday
 
@@ -93,13 +97,17 @@ class Record:
 
     def contacts(self):
         phon = []
-        for i in self.phones:
-            phon.append(str(i))
-            result_phones = ", ".join(phon)
+        result_phones = ''
+        result_emails = ''
+        if len(self.phones) > 0:
+            for i in self.phones:
+                phon.append(str(i))
+                result_phones = ", ".join(phon)
         em = []
-        for i in self.emails:
-            em.append(str(i))
-            result_emails = ", ".join(em)
+        if len(self.emails) > 0:
+            for i in self.emails:
+                em.append(str(i))
+                result_emails = ", ".join(em)
         return f"name: {str(self.name.value)};\n" \
                f"phone: {result_phones};\n" \
                f"e-mail: {result_emails};\n" \
@@ -122,7 +130,17 @@ class AddressBook(UserDict):
         print("Record was deleted")
 
 
+p = Path("address_book.bin")
+address_book = AddressBook()
+
+if p.exists():
+    with open("address_book.bin", "rb") as file:
+        address_book.data = pickle.load(file)
+
+
+
 if __name__ == "__main__":
+
     user_1 = Name("User_1")
     user_1_phone = Phone("034-1232-12312-12312")
     user_1_email = Email("user1@gmail.com")
