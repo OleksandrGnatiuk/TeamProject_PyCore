@@ -1,4 +1,6 @@
 from datetime import datetime
+from pathlib import Path
+import pickle
 
 
 class ResponsiblePerson:
@@ -14,8 +16,6 @@ class ResponsiblePerson:
 class Task:
     """Клас для створення завдання"""
 
-    cnt = 0
-
     def __init__(self, text: str, person: ResponsiblePerson, deadline):
         self.text = text
         self.person = person
@@ -25,8 +25,6 @@ class Task:
 
         self.status = "in process"
 
-        Task.cnt += 1
-        self.id = self.cnt
 
 
     def well_done(self):  # зміна статусу виконання завдання
@@ -37,27 +35,31 @@ class Task:
         """функція перевіряє статус виконання на момент визову"""
 
         today = datetime.now()
-        if today > self.deadline:
-            self.status = "FAIL :("
-        else:
-            self.status = "in process"
+        if self.status != "done":
+            if today > self.deadline:
+                self.status = "FAIL"
+            else:
+                self.status = "in process"
 
 
     def __str__(self):
         self.is_in_time()
-        return f"\nID: {self.id}     DEADLINE: {self.deadline.date()}\nTASK: {self.text}\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n"
+        return f"\nDEADLINE: {self.deadline.date()}\nTASK: {self.text}\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n"
 
    
 
 class TaskList:
     """Клас для створення списку завдань"""
     
+    cnt = 0
+
     def __init__(self):
         self.task_lst = {}
 
 
     def add_task(self, task: Task):  # додаємо нове завдання
-        self.task_lst[task.id] = task
+        TaskList.cnt += 1
+        self.task_lst[self.cnt] = task
 
 
     def remove_task(self, ID):  # видаляємо завдання по ID
@@ -67,7 +69,7 @@ class TaskList:
 
     def show_all_tasks(self):  # виводимо перелік всіх завдань
         for k, v in self.task_lst.items():
-            print(str(v))
+            print(f"ID: {k}{v}")
 
 
     def change_deadline(self, ID, new_deadline):  
@@ -92,10 +94,27 @@ class TaskList:
         result = "\n"
         for id, task in self.task_lst.items():
             if responsible_person.title() == task.person.name:
-                result += str(task)
+                result += f'{int(self.id)}\n{task})'
         return result
 
+    def save_to_file(self):
+        with open("tasks.bin", "wb") as fh:
+            pickle.dump(self.task_lst, fh)
 
+
+
+file = Path("tasks.bin")
+tasklist = TaskList()
+
+if file.exists():
+    with open("tasks.bin", "rb") as f:
+        dct = pickle.load(f)
+        tasklist.task_lst.update(dct)
+        ids = [int(i) for i in tasklist.task_lst]
+        if len(ids) > 0:
+            tasklist.cnt = max(ids)
+        else:
+            tasklist.cnt = 0
 
 
 if __name__ == "__main__":
@@ -106,27 +125,29 @@ if __name__ == "__main__":
     anastasiya = ResponsiblePerson("Anastasiya")
 
     task_1 = Task("Написати функцію", sasha, "2023-1-27")
-    task_2 = Task("Написати класи та методи", oleg, "2023-1-28")
-    task_3 = Task("Створити хендлер", oleg, "2023-1-29")
-    task_4 = Task("Підготувати презениацію", anastasiya, "2023-1-30")
+    # task_2 = Task("Написати класи та методи", oleg, "2023-1-28")
+    # task_3 = Task("Створити хендлер", oleg, "2023-1-29")
+    # task_4 = Task("Підготувати презентацію", anastasiya, "2023-1-30")
 
     # print(task_1)
-    # task_1.well_done()
+    task_1.well_done()
     # task_1.in_time()
     # print(task_1)
 
     to_do = TaskList()
 
     to_do.add_task(task_1)
-    to_do.add_task(task_2)
-    to_do.add_task(task_3)
-    to_do.add_task(task_4)
+    # to_do.add_task(task_2)
+    # to_do.add_task(task_3)
+    # to_do.add_task(task_4)
 
     # to_do.show_all_tasks()
 
     # to_do.change_deadline(1, '2023-3-1')
 
-    # to_do.show_all_tasks()
+    to_do.show_all_tasks()
 
-    to_do.search_task("підготувати")
-    print(to_do.search_respons_person("oleg"))
+    # to_do.save_to_file()
+
+    # to_do.search_task("підготувати")
+    # print(to_do.search_respons_person("oleg"))
