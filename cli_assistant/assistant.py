@@ -4,8 +4,9 @@ from pathlib import Path
 # from prompt_toolkit import prompt
 # from prompt_toolkit.completion import NestedCompleter
 from address_book_classes import *
-from clean_folder import *
+from clean_folder import create_folders, sort_files, delete_folders, unpack_archives
 from note_book_classes import *
+from task_list_classes import *
 from currency import *
 
 
@@ -14,7 +15,6 @@ def save_to_pickle():
 
     with open("address_book.bin", "wb") as fh:
         pickle.dump(address_book.data, fh)
-
 
 
 def say_hello(s=None):
@@ -140,13 +140,13 @@ def change_ph(value: str):
         return f"\nContact {name.title()} does not exists\n"
 
 
-# def contact(name):
-#     """ Функція відображає номер телефону абонента, ім'я якого було в команді 'phone ...'"""
-#     if name.title() in address_book:
-#         record = address_book[name.title()]
-#         return record.get_contact()
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
+def contact(name):
+    """ Функція відображає номер телефону абонента, ім'я якого було в команді 'phone ...'"""
+    if name.title() in address_book:
+        record = address_book[name.title()]
+        return record.contacts()
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
 
 
 
@@ -216,59 +216,135 @@ def change_em(value: str):
 #         return f"\nAddress for {name.title()} was delete.\n"
 #     else:
 #         return f"\nContact {name.title()} does not exist.\n"
-#
-#
 
-# def remove_bd(value):
-#     name = value.lower().title().strip()
-#
-#     if name.title() in address_book:
-#         address_book[name.title()].delete_birthday()
-#         save_to_pickle()
-#         return f"\nBirthday for {name.title()} was delete.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
-#
-#
-#
+def remove_bd(value):
+    name = value.lower().title().strip()
 
-# def add_contact_birthday(value):
-#     name, birthday = value.lower().strip().split()
-#     birthday = tuple(birthday.split("-"))
-#
-#     if name.title() in address_book:
-#         address_book[name.title()].add_birthday(*birthday)
-#         save_to_pickle()
-#         return f"\nThe Birthday for {name.title()} was recorded.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exists.\n"
-#
-#
-
-# def days_to_birthday(name):
-#     if name.title() in address_book:
-#         if not address_book[name.title()].birthday is None:
-#             days = address_book[name.title()].days_to_bd()
-#             return days
-#         else:
-#             return f"\n{name.title()}'s birthday is unknown.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exists.\n"
-#
+    if name.title() in address_book:
+        address_book[name.title()].delete_birthday()
+        save_to_pickle()
+        return f"\nBirthday for {name.title()} was delete.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
 
 
-# def clean_f(path):
-#     folder_to_sort = Path(path)
-#     p = Path(path)
-#     try:
-#         sort_file(folder_to_sort, p)
-#     except FileNotFoundError:
-#         print(
-#             "\nThe folder was not found. Check the folder's path and run the command again!.\n"
-#         )
-#         return
-#     return show_result(folder_to_sort)
+def add_contact_birthday(value):
+    name, birthday = value.lower().strip().split()
+    # birthday = tuple(birthday.split("-"))
 
+    if name.title() in address_book:
+        address_book[name.title()].add_birthday(birthday)
+        save_to_pickle()
+        return f"\nThe Birthday for {name.title()} was recorded.\n"
+    else:
+        return f"\nContact {name.title()} does not exists.\n"
+
+
+def days_to_bd(name):
+    if name.title() in address_book:
+        if not address_book[name.title()].birthday is None:
+            days = address_book[name.title()].days_to_birthday()
+            return days
+        else:
+            return f"\n{name.title()}'s birthday is unknown.\n"
+    else:
+        return f"\nContact {name.title()} does not exists.\n"
+
+
+def get_birthdays(value=None):
+    if value.strip() == '':
+        period = 7
+    else:
+        period = int(value.strip())
+    return address_book.get_birthdays_per_week(period)
+
+def change_bd(value):
+    name, new_birthday = value.lower().strip().split()
+    if name.title() in address_book:
+        address_book[name.title()].delete_birthday()
+        address_book[name.title()].add_birthday(new_birthday)
+        save_to_pickle()
+        return f"\nBirthday for {name.title()} was changed.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
+
+    
+def add_the_task(value):
+    try:
+        name, deadline, text = value.lower().strip().split(" ", 2)
+        user = ResponsiblePerson(name)
+        task = Task(text, user, deadline)
+        tasklist.add_task(task)
+        tasklist.save_to_file()
+    except Exception:
+        f"Please white command in format 'add task <name> <deadline in format: YYYY-m-d> <task>'"
+    else:
+        return f"\nThe task was created.\n"
+
+
+def remove_the_task(value):
+    try:
+        Id = int(value.strip())
+    except TypeError:
+        f"Please white command in format 'remove task <ID>'"
+    else:
+        tasklist.remove_task(Id)
+        tasklist.save_to_file()
+        return f"\nThe task was delete\n"
+
+
+def show_tasks(value):
+    return tasklist.show_all_tasks()
+
+
+def done(value):
+    try:
+        Id = int(value.strip())
+    except TypeError:
+        f"Please white command in format 'task done <ID>'"
+    else:
+        if Id in tasklist.task_lst:
+            tasklist.task_lst[Id].well_done()
+            tasklist.save_to_file()
+    return f"Status of task ID: {Id} is 'done'"
+
+
+def change_d_line(value):
+    Id, new_deadline = value.split()
+    try:
+        Id = int(Id)
+    except TypeError:
+        f"Please white command in format 'change deadline <ID> <new deadline>'"
+    else:
+        if Id in tasklist.task_lst:
+            tasklist.change_deadline(Id, new_deadline)
+            tasklist.save_to_file()
+    return f"Deadline for task ID: {Id} was changed"
+    
+
+def search_t(text_to_search: str):
+    text = text_to_search.strip().lower()
+    return tasklist.search_task(text)
+    
+
+def search_responce(name):
+    name = name.strip().lower()
+    return tasklist.search_respons_person(name)
+
+
+
+def clean_f(path):
+    p = Path(path)
+    try:
+        create_folders(p) 
+    except FileNotFoundError:
+        print("\nThe folder was not found. Check the folder's path and run the command again!.\n")
+    else:
+        sort_files(p)
+        delete_folders(p)
+        unpack_archives(p)  
+
+        
 
 
 def helps(s=None):
@@ -284,8 +360,9 @@ def helps(s=None):
     9) to add address, write command: add address <name> <address>
     10) to change address, write command: change address <name> <new address>
     11) to remove address, write command: remove address <name>
-    12) to add birthday of contact, write command: add birthday <name> <yyyy-m-d>
+    12) to add birthday of contact, write command: add birthday <name> <d/m/yyyy>
     13) to remove birthday, write command: remove birthday <name>
+    14) to change birthday, write command: change birthday <name> <new_birthday>
     14) to see how many days to contact's birthday, write command: days to birthday <name>
     15) to see list of birthdays in period, write command: birthdays <number of days>
     16) to search contact, where is 'text', write command: search <text>
@@ -333,14 +410,22 @@ handlers = {
     "add email": add_em,
     "remove email": remove_em,
     "change email": change_em,
-    # "phone": contact,
-    # "birthdays": get_birthdays,
+    "phone": contact,
+    "add birthday": add_contact_birthday,
+    "remove birthday": remove_bd,
+    "change birthday": change_bd,
+    "days to birthday": days_to_bd,
+    "birthdays": get_birthdays,
     # "change address": change_address,
-    # "remove birthday": remove_bd,
     # "remove address": remove_address,
-    # "add birthday": add_contact_birthday,
     # "add address": add_address,
-    # "days to birthday": days_to_birthday,
+    "add task": add_the_task,
+    "remove task": remove_the_task,
+    "task done": done,
+    "show tasks": show_tasks,
+    "change deadline": change_d_line,
+    "search in task": search_t,
+    "search respons person": search_responce,
     # "clean-folder": clean_f,
     # "search": search,
 }

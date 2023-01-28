@@ -17,7 +17,7 @@ class Task:
     """Клас для створення завдання"""
 
     def __init__(self, text: str, person: ResponsiblePerson, deadline):
-        self.text = text
+        self.text = text.capitalize()
         self.person = person
 
         y, m, d = deadline.split("-")
@@ -44,7 +44,7 @@ class Task:
 
     def __str__(self):
         self.is_in_time()
-        return f"\nDEADLINE: {self.deadline.date()}\nTASK: {self.text}\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n"
+        return f"\nDEADLINE: {self.deadline.date()}\n\nTASK: {self.text}\n\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n============="
 
    
 
@@ -68,8 +68,11 @@ class TaskList:
 
 
     def show_all_tasks(self):  # виводимо перелік всіх завдань
+        result = '\n'
         for k, v in self.task_lst.items():
-            print(f"ID: {k}{v}")
+            s= f"=== ID: {k} ==={v}\n"
+            result += s
+        return result
 
 
     def change_deadline(self, ID, new_deadline):  
@@ -94,7 +97,7 @@ class TaskList:
         result = "\n"
         for id, task in self.task_lst.items():
             if responsible_person.title() == task.person.name:
-                result += f'{int(self.id)}\n{task})'
+                result += f'{int(id)}\n{task})'
         return result
 
     def save_to_file(self):

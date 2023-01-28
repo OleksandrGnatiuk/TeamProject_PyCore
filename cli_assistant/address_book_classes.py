@@ -117,14 +117,11 @@ class Record:
         self.birthday = birthday
         print("Date of birth was added")
 
-    def delete_birthday(self, old_birthday):
+
+    def delete_birthday(self):
         """Delete date of birth"""
-        old_birthday = Birthday(old_birthday)
-        if self.birthday.value == old_birthday.value:
-            self.birthday = None
-            print("Date of birth was deleted")
-        else:
-            print("such a date does not exist")
+        self.birthday = None
+        
 
     def days_to_birthday(self):
         """How many days until user's birthday"""
@@ -260,7 +257,7 @@ if __name__ == "__main__":
     user_2_rec.add_phone("+3802312323231222")
 
     user_2_rec.add_birthday("26/03/2002")
-    user_2_rec.delete_birthday("26/03/2002")
+    # user_2_rec.delete_birthday("26/03/2002")
     user_2_rec.add_birthday("29/01/2002")
     print(user_2_rec.days_to_birthday())
 
