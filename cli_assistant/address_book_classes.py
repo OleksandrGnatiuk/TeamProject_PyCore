@@ -186,48 +186,37 @@ class AddressBook(UserDict):
         self.data.pop(name)
         print("Record was deleted")
 
-    def get_birthdays_per_week(self, range_of_days=7):
+    def get_birthdays_per_range(self, range_of_days=7):
         """a list of users who have a birthday coming up soon"""
         
+        near_birthdays = {}
         current_date = datetime.now().date()
         for name, value in self.data.items():
             user_name = name
             user_date = value.birthday.value
             user_date = datetime.strptime(user_date, '%d/%m/%Y').date()
             user_date = user_date.replace(year = current_date.year)
-            day_of_week = user_date.weekday()
             delta_days = user_date - current_date
 
             if 0 < delta_days.days <= range_of_days:
-                if day_of_week == 5 or day_of_week == 6:
-                    near_birthdays['name0'].append(user_name)
-                else:    
-                    near_birthdays[f"name{day_of_week}"].append(user_name)
-            elif 0 < delta_days.days > range_of_days:
-                continue
+                # print(f"{user_name}'s birthday will be {user_date}")
+                near_birthdays.update({name: user_date})
+            
             else:
                 user_date = user_date.replace(year=user_date.year + 1)
                 delta_days = user_date - current_date
                 if 0 < delta_days.days <= range_of_days:
-                    if day_of_week == 5 or day_of_week == 6:
-                        near_birthdays['name0'].append(user_name)  
-                    else:    
-                        near_birthdays[f"name{day_of_week}"].append(user_name)
+                    # print(f"{user_name}'s birthday will be {user_date}")
+                    near_birthdays.update({name: user_date})
+
                 elif 0 < delta_days.days > range_of_days:
                     continue
-        for i in range(5):
-            if near_birthdays[f"name{i}"] == []:
-                continue
-            else:
-                print(near_birthdays[f"day{i}"]+':', ", ".join(near_birthdays[f"name{i}"]))
+                
+        print(f"Near birthdays for next {range_of_days} days:")
+        sorted_near_birthdays = dict(sorted(near_birthdays.items(), key=lambda item:item[1]))
+        for key, value in sorted_near_birthdays.items():
+            print(f"{key}'s birthday will be on {str(value)}")
 
-near_birthdays = {
-                'day0': 'Monday', 'name0': [],
-                'day1': 'Tuesday', 'name1': [],
-                'day2': 'Wednesday', 'name2': [],
-                'day3': 'Thurthday', 'name3': [],
-                'day4': 'Friday', 'name4': []
-                }
 
 p = Path("address_book.bin")
 address_book = AddressBook()
@@ -269,9 +258,18 @@ if __name__ == "__main__":
     user_2_rec.add_birthday("29/01/2002")
     print(user_2_rec.days_to_birthday())
 
+    user_3 = Name("User_3")
+    user_3_phone = Phone("097123123123")
+    user_3_email = Email("user2@gmail.com")
+    user_3_rec = Record(user_3, user_3_phone ,user_3_email)
+    user_3_rec.add_phone("+380789345784")
+    user_3_rec.add_birthday("29/05/2000")
+
+
     my_book = AddressBook()
     my_book.add_record(user_1_rec)
     my_book.add_record(user_2_rec)
-    my_book.get_birthdays_per_week()
+    my_book.add_record(user_3_rec)
+    my_book.get_birthdays_per_range(range_of_days=190)
     #my_book.del_record("User_1")
     print(my_book.show_book())
