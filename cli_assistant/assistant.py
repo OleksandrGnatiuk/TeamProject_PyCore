@@ -150,17 +150,39 @@ def change_ph(value: str):
 
 
 
-# def add_em(value):
-#     name, email = value.split()
-#     name = name.title()
-#     if name.title() in address_book:
-#         address_book[name.title()].add_email(email)
-#         save_to_pickle()
-#         return f"\nThe e-mail for {name.title()} was recorded.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
-#
-#
+def add_em(value):
+    name, email = value.split()
+    name = name.title()
+    if name.title() in address_book:
+        address_book[name.title()].add_email(email)
+        save_to_pickle()
+        return f"\nThe e-mail for {name.title()} was recorded.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
+
+
+def remove_em(value):
+    name, email = value.split()
+    name = name.title()
+    email = email.lower()
+    if name.title() in address_book:
+        address_book[name.title()].delete_email(email)
+        save_to_pickle()
+        return f"\nThe e-mail for {name.title()} was delete.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
+
+
+def change_em(value: str):
+    name, old_em, new_em = value.split()
+
+    if name.strip().lower().title() in address_book:
+        address_book[name.strip().lower().title()].change_email(old_em,new_em)
+        save_to_pickle()
+        return f"\nThe e-mail for {name.title()} was changed.\n"
+    else:
+        return f"\nContact {name.title()} does not exists.\n"
+
 
 # def add_address(value):
 #     name, address = value.split(" ", 1)
@@ -192,30 +214,6 @@ def change_ph(value: str):
 #         address_book[name.title()].delete_adrs()
 #         save_to_pickle()
 #         return f"\nAddress for {name.title()} was delete.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
-#
-#
-
-# def change_em(value: str):
-#     name, new_em = value.split()
-#
-#     if name.strip().lower().title() in address_book:
-#         address_book[name.strip().lower().title()].change_email(new_em)
-#         save_to_pickle()
-#         return f"\nThe e-mail for {name.title()} was changed.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exists.\n"
-#
-#
-
-# def remove_em(value):
-#     name = value.lower().title().strip()
-#
-#     if name.title() in address_book:
-#         address_book[name.title()].delete_email()
-#         save_to_pickle()
-#         return f"\nE-mail for {name.title()} was delete.\n"
 #     else:
 #         return f"\nContact {name.title()} does not exist.\n"
 #
@@ -332,20 +330,17 @@ handlers = {
     "add phone": add_phone,
     "remove phone": remove_phone,
     "change phone": change_ph,
+    "add email": add_em,
+    "remove email": remove_em,
+    "change email": change_em,
     # "phone": contact,
     # "birthdays": get_birthdays,
-
-    # "change email": change_em,
     # "change address": change_address,
-    # "remove email": remove_em,
     # "remove birthday": remove_bd,
     # "remove address": remove_address,
     # "add birthday": add_contact_birthday,
-    # "add email": add_em,
     # "add address": add_address,
     # "days to birthday": days_to_birthday,
-
-
     # "clean-folder": clean_f,
     # "search": search,
 }
