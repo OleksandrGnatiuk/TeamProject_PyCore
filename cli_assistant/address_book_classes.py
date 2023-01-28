@@ -29,12 +29,43 @@ class Name(Field):
 
 
 class Phone(Field):
+    @staticmethod
+    def validate_phone(phone):
+        new_phone = str(phone).strip().replace("+", "").replace(" ", "")
+        if not new_phone.isdigit():
+            raise ValueError("The phone number should contain only numbers!")
+        else:
+            if len(new_phone) == 10:
+                return f"{new_phone}"
+            else:
+                raise ValueError("Check the length of the phone number!")
 
-    def __str__(self):
-        return self._value
+    def __init__(self, value):
+        self._value = Phone.validate_phone(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Phone.validate_phone(value)
 
 
 class Email(Field):
+    @staticmethod
+    def validate_email(email):
+        pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,}$"
+        if re.match(pattern, email) is not None:
+            return f"{email}"
+        else:
+            raise ValueError("Email is not correct!")
+
+    def __init__(self, value):
+        self._value = Email.validate_email(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Email.validate_email(value)
+
+
+class Address(Field):
 
     def __str__(self):
         return self._value
@@ -49,16 +80,17 @@ class Birthday(Field):
     @value.setter
     def value(self, value):
         try:
-            if value != None:
+            if value is not None:
                 self._value = datetime.strptime(value, '%d/%m/%Y').date()
         except ValueError:
-            print (f'Please, input the date in format dd/mm/yyyy ')
+            print(f'Please, input the date in format dd/mm/yyyy ')
 
 
 class Record:
-    def __init__(self, name, phone=None, email=None, birthday=None):
+    def __init__(self, name, phone=None, email=None, birthday=None, address=None):
         self.name = name
         self.birthday = birthday
+        self.address = address
 
         self.emails = []
         if email:
@@ -69,6 +101,7 @@ class Record:
             self.phones.append(phone)
 
     """Робота з phone"""
+
     def add_phone(self, phone):
         phone = Phone(phone)
         self.phones.append(phone)
@@ -90,6 +123,7 @@ class Record:
                 print("Phone was deleted ")
 
     """Робота з e-mail"""
+
     def add_email(self, email):
         email = Email(email)
         self.emails.append(email)
@@ -111,6 +145,7 @@ class Record:
                 print("Email was deleted")
 
     """Робота з датою народження"""
+
     def add_birthday(self, birthday):
         """Adding date of birth"""
         birthday = Birthday(birthday)
@@ -121,7 +156,7 @@ class Record:
         """Delete date of birth"""
         old_birthday = Birthday(old_birthday)
         if self.birthday.value == old_birthday.value:
-            self.birthday = None
+            self.birthday = 'Не вказано'
             print("Date of birth was deleted")
         else:
             print("such a date does not exist")
@@ -132,9 +167,9 @@ class Record:
             try:
                 birthday_value = datetime.strptime(self.birthday.value, '%d/%m/%Y').date()
                 current_date = datetime.now().date()
-                user_date = birthday_value.replace(year = current_date.year)
+                user_date = birthday_value.replace(year=current_date.year)
                 self.delta_days = user_date - current_date
-                    
+
                 if 0 < self.delta_days.days:
                     return f'Лишилось до Дня народження: {self.delta_days.days} днів.'
                 else:
@@ -147,6 +182,20 @@ class Record:
         else:
             return f'Date of birth is not found. Please, add day of birth, if you want. '
 
+    """Робота з адресою"""
+
+    def add_address(self, address):
+        address = Address(address)
+        self.address = address
+        print("Address was added")
+
+    def delete_address(self, old_address):
+        old_address = Address(old_address)
+        if self.address.value == old_address.value:
+            self.address = 'Не вказано'
+            print("Address was deleted")
+        else:
+            print("Such an address does not exist")
 
     def contacts(self):
         phon = []
@@ -161,10 +210,12 @@ class Record:
             for i in self.emails:
                 em.append(str(i))
                 result_emails = ", ".join(em)
+
         return f"name: {str(self.name.value)};\n" \
                f"phone: {result_phones};\n" \
                f"e-mail: {result_emails};\n" \
-               f"birthday:{self.birthday};\n"
+               f"birthday: {self.birthday};\n" \
+               f"address: {self.address};\n"
 
 
 class AddressBook(UserDict):
@@ -189,14 +240,14 @@ class AddressBook(UserDict):
             user_name = name
             user_date = value.birthday.value
             user_date = datetime.strptime(user_date, '%d/%m/%Y').date()
-            user_date = user_date.replace(year = current_date.year)
+            user_date = user_date.replace(year=current_date.year)
             day_of_week = user_date.weekday()
             delta_days = user_date - current_date
 
             if 0 < delta_days.days <= range_of_days:
                 if day_of_week == 5 or day_of_week == 6:
                     near_birthdays['name0'].append(user_name)
-                else:    
+                else:
                     near_birthdays[f"name{day_of_week}"].append(user_name)
             elif 0 < delta_days.days > range_of_days:
                 continue
@@ -205,24 +256,25 @@ class AddressBook(UserDict):
                 delta_days = user_date - current_date
                 if 0 < delta_days.days <= range_of_days:
                     if day_of_week == 5 or day_of_week == 6:
-                        near_birthdays['name0'].append(user_name)  
-                    else:    
+                        near_birthdays['name0'].append(user_name)
+                    else:
                         near_birthdays[f"name{day_of_week}"].append(user_name)
                 elif 0 < delta_days.days > range_of_days:
                     continue
         for i in range(5):
-            if near_birthdays[f"name{i}"] == []:
+            if not near_birthdays[f"name{i}"]:
                 continue
             else:
-                print(near_birthdays[f"day{i}"]+':', ", ".join(near_birthdays[f"name{i}"]))
+                print(near_birthdays[f"day{i}"] + ':', ", ".join(near_birthdays[f"name{i}"]))
+
 
 near_birthdays = {
-                'day0': 'Monday', 'name0': [],
-                'day1': 'Tuesday', 'name1': [],
-                'day2': 'Wednesday', 'name2': [],
-                'day3': 'Thurthday', 'name3': [],
-                'day4': 'Friday', 'name4': []
-                }
+    'day0': 'Monday', 'name0': [],
+    'day1': 'Tuesday', 'name1': [],
+    'day2': 'Wednesday', 'name2': [],
+    'day3': 'Thurthday', 'name3': [],
+    'day4': 'Friday', 'name4': []
+}
 
 p = Path("address_book.bin")
 address_book = AddressBook()
@@ -231,33 +283,31 @@ if p.exists():
     with open("address_book.bin", "rb") as file:
         address_book.data = pickle.load(file)
 
-
-
 if __name__ == "__main__":
-
     user_1 = Name("User_1")
-    user_1_phone = Phone("034-1232-12312-12312")
+    user_1_phone = Phone("1234567890")
     user_1_email = Email("user1@gmail.com")
-    user_1_rec = Record(user_1,user_1_phone ,user_1_email )
-    user_1_rec.add_phone("23123-1232-1132")
-    user_1_rec.add_phone("23123-12322")
-    user_1_rec.add_phone("09721-1132")
+    user_1_rec = Record(user_1, user_1_phone, user_1_email)
+    user_1_rec.add_phone("0970123546")
+    user_1_rec.add_phone("0920193546")
+    user_1_rec.add_phone("0970125346")
     user_1_rec.add_email("ar@gmail.com")
     user_1_rec.add_email("arb@gmail.com")
     user_1_rec.add_email("arc@gmail.com")
-    user_1_rec.delete_phone("23123-1232-1132")
+    user_1_rec.delete_phone("0970123546")
     user_1_rec.delete_email("arb@gmail.com")
-    user_1_rec.change_phone("23123-1232-1132", "111111111111111")
+    user_1_rec.change_phone("0970123546", "0971111546")
 
     user_1_rec.add_birthday("31/01/2002")
+    user_1_rec.add_address("91502 Elliott Circles.New Janet")
 
     user_2 = Name("User_2")
-    user_2_phone = Phone("097123123123")
+    user_2_phone = Phone("0979123546")
     user_2_email = Email("user2@gmail.com")
-    user_2_rec = Record(user_2,user_2_phone ,user_2_email )
-    user_2_rec.add_phone("+380231231222")
-    user_2_rec.add_phone("+38023132231222")
-    user_2_rec.add_phone("+3802312323231222")
+    user_2_rec = Record(user_2, user_2_phone, user_2_email)
+    user_2_rec.add_phone("0900123546")
+    user_2_rec.add_phone("+0970111146")
+    user_2_rec.add_phone("+0970120000")
 
     user_2_rec.add_birthday("26/03/2002")
     user_2_rec.delete_birthday("26/03/2002")
@@ -268,6 +318,8 @@ if __name__ == "__main__":
     my_book.add_record(user_1_rec)
     my_book.add_record(user_2_rec)
     my_book.get_birthdays_per_week()
-    #my_book.del_record("User_1")
+    user_2_rec.add_address("821 Nader Island Suite 403.Port Conorshire")
     print(my_book.show_book())
-    
+    user_2_rec.delete_address("821 Nader Island Suite 403.Port Conorshire")
+    # my_book.del_record("User_1")
+    print(my_book.show_book())
