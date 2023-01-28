@@ -92,10 +92,10 @@ ___
 
 <p> This script can manage list of task with deadlines and responsible persons.</p>
 
-- [x] to __add task__ use command:  `add task <name of responsible persons> <deadline in format YYYY-m-d> <text of task>`
-- [x] to __add remove__ use command:  `remove task <ID of task>`
+- [x] to __add task__ use command:  `add task <name of responsible persons> <deadline in format dd/mm/yyyy> <text of task>`
+- [x] to __remove task__ use command:  `remove task <ID of task>`
 - [x] to __see all tasks__ use command: `show tasks`
-- [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format YYYY-m-d>`
+- [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format dd/mm/yyyy`
 - [x] to __search in task__ use command: `search task <text_to_search>`
 - [x] to __search tasks of responsible person__ use command: `responsible person <name>`
 
@@ -149,6 +149,6 @@ ___
 Oleksandr Gnatiuk (Team Lead) <p>
 Anastasiia Kholodko (Scrum Master) <p>
 Oleg Veisa <p>
-Artem <p>
+Artem Danilov<p>
 Tatiana Maximenko
 
