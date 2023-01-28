@@ -168,7 +168,7 @@ class Record:
         return f"name: {str(self.name.value)};\n" \
                f"phone: {result_phones};\n" \
                f"e-mail: {result_emails};\n" \
-               f"birthday:{self.birthday};\n"
+               f"birthday: {self.birthday};\n"
 
 
 class AddressBook(UserDict):
@@ -186,27 +186,35 @@ class AddressBook(UserDict):
         self.data.pop(name)
         print("Record was deleted")
 
+    def search_contact(self, user_search):
+        """search for contacts based on the user's search query"""
+        counter = 0
+        for value in self.data.values():
+            result = str(value.contacts()).lower().find(user_search)
+            if result != -1:
+                counter += 1
+                print (value.contacts())
+        if counter == 0:
+            print(f"No data was found for your request. ")
+
     def get_birthdays_per_range(self, range_of_days=7):
         """a list of users who have a birthday coming up soon"""
         
         near_birthdays = {}
         current_date = datetime.now().date()
         for name, value in self.data.items():
-            user_name = name
             user_date = value.birthday.value
             user_date = datetime.strptime(user_date, '%d/%m/%Y').date()
             user_date = user_date.replace(year = current_date.year)
             delta_days = user_date - current_date
 
             if 0 < delta_days.days <= range_of_days:
-                # print(f"{user_name}'s birthday will be {user_date}")
                 near_birthdays.update({name: user_date})
             
             else:
                 user_date = user_date.replace(year=user_date.year + 1)
                 delta_days = user_date - current_date
                 if 0 < delta_days.days <= range_of_days:
-                    # print(f"{user_name}'s birthday will be {user_date}")
                     near_birthdays.update({name: user_date})
 
                 elif 0 < delta_days.days > range_of_days:
@@ -217,6 +225,7 @@ class AddressBook(UserDict):
         for key, value in sorted_near_birthdays.items():
             print(f"{key}'s birthday will be on {str(value)}")
 
+    
 
 p = Path("address_book.bin")
 address_book = AddressBook()
@@ -273,3 +282,8 @@ if __name__ == "__main__":
     my_book.get_birthdays_per_range(range_of_days=190)
     #my_book.del_record("User_1")
     print(my_book.show_book())
+
+    my_book.search_contact('078')
+    my_book.search_contact('29/01')
+    my_book.search_contact('gmail')
+    my_book.search_contact('349866') # No data found
