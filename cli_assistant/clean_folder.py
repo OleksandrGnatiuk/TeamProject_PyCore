@@ -85,7 +85,7 @@ def main():
     create_folders(path)
     sort_files(path)
     delete_folders(path)
-    unpack_archives(path)
+    # unpack_archives(path)
     print("Success")
     
 if __name__ == "__main__":
