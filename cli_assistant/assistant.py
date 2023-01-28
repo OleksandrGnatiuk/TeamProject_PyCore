@@ -7,6 +7,7 @@ from address_book_classes import *
 from clean_folder import create_folders, sort_files, delete_folders, unpack_archives
 from note_book_classes import *
 from task_list_classes import *
+import exceptions
 from currency import *
 
 
@@ -258,6 +259,7 @@ def get_birthdays(value=None):
         period = int(value.strip())
     return address_book.get_birthdays_per_week(period)
 
+
 def change_bd(value):
     name, new_birthday = value.lower().strip().split()
     if name.title() in address_book:
@@ -425,7 +427,7 @@ handlers = {
     "show tasks": show_tasks,
     "change deadline": change_d_line,
     "search in task": search_t,
-    "search respons person": search_responce,
+    "responsible person": search_responce,
     # "clean-folder": clean_f,
     # "search": search,
 }
