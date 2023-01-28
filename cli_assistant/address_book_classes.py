@@ -48,6 +48,7 @@ class Birthday(Field):
 
     @value.setter
     def value(self, value):
+        """Normalizing date of birth"""
         try:
             if value != None:
                 self._value = datetime.strptime(value, '%d/%m/%Y').date()
@@ -110,24 +111,27 @@ class Record:
                 self.emails.remove(email)
                 print("Email was deleted")
 
-    """Робота з датою народження"""
+    """Work with date of birth"""
     def add_birthday(self, birthday):
         """Adding date of birth"""
+
         birthday = Birthday(birthday)
         self.birthday = birthday
         print("Date of birth was added")
 
     def delete_birthday(self, old_birthday):
         """Delete date of birth"""
+
         old_birthday = Birthday(old_birthday)
         if self.birthday.value == old_birthday.value:
             self.birthday = None
             print("Date of birth was deleted")
         else:
-            print("such a date does not exist")
+            raise ValueError("such a date does not exist")
 
     def days_to_birthday(self):
         """How many days until user's birthday"""
+
         if self.birthday.value:
             try:
                 birthday_value = datetime.strptime(self.birthday.value, '%d/%m/%Y').date()
@@ -145,7 +149,7 @@ class Record:
             except ValueError:
                 return f'Please, input date in format dd/mm/yyyy '
         else:
-            return f'Date of birth is not found. Please, add day of birth, if you want. '
+            raise ValueError(f'Date of birth is not found. Please, add day of birth, if you want. ')
 
 
     def contacts(self):
@@ -184,6 +188,7 @@ class AddressBook(UserDict):
 
     def get_birthdays_per_week(self, range_of_days=7):
         """a list of users who have a birthday coming up soon"""
+        
         current_date = datetime.now().date()
         for name, value in self.data.items():
             user_name = name
