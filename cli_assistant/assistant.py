@@ -7,7 +7,7 @@ from address_book_classes import *
 from clean_folder import create_folders, sort_files, delete_folders, unpack_archives
 from note_book_classes import *
 from task_list_classes import *
-import exceptions
+from exceptions import *
 from currency import *
 
 
@@ -25,45 +25,45 @@ def say_hello(s=None):
 def say_goodbye(s=None):
     return "\nGood bye!\n"
 
-
+@input_error
 def new_note(text):
     note_ = RecordNote(text)
     nb.add_new_note(note_)
     return f"\nThe note was created.\n"
 
-
+@input_error
 def ed_note(value):
     id_, text = value.split(" ", 1)
     nb.to_edit_text(id_, text)
     return f"\nThe note was changed.\n"
 
-
+@input_error
 def tags(value):
     id_, *tags_ = value.split()
     nb.to_add_tags(id_, list(tags_))
     return f"\nTags for note id:{id_} was added.\n"
 
-
+@input_error
 def sh_notes(value):
     return nb.show_all_notes()
 
-
+@input_error
 def del_notes(id_):
     return nb.to_remove_note(id_)
 
-
+@input_error
 def search_n(text_to_search):
     return nb.search_note(text_to_search)
 
-
+@input_error
 def search_t(tag_to_search):
     return nb.search_tag(tag_to_search)
 
-
+@input_error
 def note(id_):
     return nb.show_note(id_)
 
-
+@input_error
 def get_curr(value):
     currency = value.strip().upper()
     if currency.isalpha():
@@ -71,7 +71,7 @@ def get_curr(value):
     else:
         return "\nYou need write command in format 'currency <name of currency>'\n"
 
-
+@input_error
 def add_contact(value):
     """ Add new contact to address book """
 
@@ -89,7 +89,7 @@ def add_contact(value):
     else:
         return f"\nContact {name.value.title()} already exists.\n"
 
-
+@input_error
 def show_all(s):
     """ Функція виводить всі записи в телефонній книзі при команді 'show all' """
 
@@ -101,6 +101,7 @@ def show_all(s):
     return result
 
 
+@input_error
 def remove_contact(name: str):
     record = address_book[name.strip().lower().title()]
     address_book.del_record(record.name.value)
@@ -108,6 +109,7 @@ def remove_contact(name: str):
     return f"\nContact {name.title()} was removed.\n"
 
 
+@input_error
 def add_phone(value):
     name, phone = value.lower().strip().title().split()
 
@@ -119,6 +121,7 @@ def add_phone(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def remove_phone(value):
     name, phone = value.lower().title().strip().split()
 
@@ -130,6 +133,7 @@ def remove_phone(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def change_ph(value: str):
     name, old_phone, new_phone = value.split()
 
@@ -141,6 +145,7 @@ def change_ph(value: str):
         return f"\nContact {name.title()} does not exists\n"
 
 
+@input_error
 def contact(name):
     """ Функція відображає номер телефону абонента, ім'я якого було в команді 'phone ...'"""
     if name.title() in address_book:
@@ -150,7 +155,7 @@ def contact(name):
         return f"\nContact {name.title()} does not exist.\n"
 
 
-
+@input_error
 def add_em(value):
     name, email = value.split()
     name = name.title()
@@ -162,6 +167,7 @@ def add_em(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def remove_em(value):
     name, email = value.split()
     name = name.title()
@@ -174,6 +180,7 @@ def remove_em(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def change_em(value: str):
     name, old_em, new_em = value.split()
 
@@ -185,6 +192,7 @@ def change_em(value: str):
         return f"\nContact {name.title()} does not exists.\n"
 
 
+@input_error
 def add_adrs(value):
     name, address = value.split(" ", 1)
     name = name.title()
@@ -196,7 +204,7 @@ def add_adrs(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
-
+@input_error
 def change_adrs(value):
     name, address = value.split(" ", 1)
     name = name.title()
@@ -209,7 +217,7 @@ def change_adrs(value):
         return f"\nContact {name.title()} does not exists.\n"
 
 
-
+@input_error
 def remove_adrs(value):
     name = value.lower().title().strip()
     if name.title() in address_book:
@@ -220,7 +228,7 @@ def remove_adrs(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
-
+@input_error
 def remove_bd(value):
     name = value.lower().title().strip()
 
@@ -232,6 +240,7 @@ def remove_bd(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def add_contact_birthday(value):
     name, birthday = value.lower().strip().split()
     # birthday = tuple(birthday.split("-"))
@@ -244,6 +253,7 @@ def add_contact_birthday(value):
         return f"\nContact {name.title()} does not exists.\n"
 
 
+@input_error
 def days_to_bd(name):
     if name.title() in address_book:
         if not address_book[name.title()].birthday is None:
@@ -255,6 +265,7 @@ def days_to_bd(name):
         return f"\nContact {name.title()} does not exists.\n"
 
 
+@input_error
 def get_birthdays(value=None):
     if value.strip() == '':
         period = 7
@@ -263,6 +274,7 @@ def get_birthdays(value=None):
     return address_book.get_birthdays_per_range(period)
 
 
+@input_error
 def change_bd(value):
     name, new_birthday = value.lower().strip().split()
     if name.title() in address_book:
@@ -274,13 +286,14 @@ def change_bd(value):
         return f"\nContact {name.title()} does not exist.\n"
 
 
+@input_error
 def search(text_to_search: str):
     """ Search contact where there is 'text_to_search'  """
 
     return address_book.search_contact(text_to_search)
 
 
-
+@input_error
 def add_the_task(value):
     try:
         name, deadline, text = value.lower().strip().split(" ", 2)
@@ -294,6 +307,7 @@ def add_the_task(value):
         return f"\nThe task was created.\n"
 
 
+@input_error
 def remove_the_task(value):
     try:
         Id = int(value.strip())
@@ -304,11 +318,11 @@ def remove_the_task(value):
         tasklist.save_to_file()
         return f"\nThe task was delete\n"
 
-
+@input_error
 def show_tasks(value):
     return tasklist.show_all_tasks()
 
-
+@input_error
 def done(value):
     try:
         Id = int(value.strip())
@@ -320,7 +334,7 @@ def done(value):
             tasklist.save_to_file()
     return f"Status of task ID: {Id} is 'done'"
 
-
+@input_error
 def change_d_line(value):
     Id, new_deadline = value.split()
     try:
@@ -334,17 +348,19 @@ def change_d_line(value):
     return f"Deadline for task ID: {Id} was changed"
     
 
+@input_error
 def search_t(text_to_search: str):
     text = text_to_search.strip().lower()
     return tasklist.search_task(text)
     
 
+@input_error
 def search_responce(name):
     name = name.strip().lower()
     return tasklist.search_respons_person(name)
 
 
-
+@input_error
 def clean_f(path):
     p = Path(path)
     try:
@@ -357,8 +373,6 @@ def clean_f(path):
         unpack_archives(p)  
 
         
-
-
 def helps(s=None):
     rules = """LIST OF COMMANDS: \n
     1) to add new contact and one or more phones, write command: add contact <name> <phone> <phone> ... <phone>
@@ -372,7 +386,7 @@ def helps(s=None):
     9) to add address, write command: add address <name> <address>
     10) to change address, write command: change address <name> <new address>
     11) to remove address, write command: remove address <name>
-    12) to add birthday of contact, write command: add birthday <name> <d/m/yyyy>
+    12) to add birthday of contact, write command: add birthday <name> <dd/mm/yyyy>
     13) to remove birthday, write command: remove birthday <name>
     14) to change birthday, write command: change birthday <name> <new_birthday>
     14) to see how many days to contact's birthday, write command: days to birthday <name>
@@ -438,8 +452,8 @@ handlers = {
     "change deadline": change_d_line,
     "search in task": search_t,
     "responsible person": search_responce,
-    # "clean-folder": clean_f,
     "search": search,
+    "clean-folder": clean_f,
 }
 
 # completer = NestedCompleter.from_nested_dict({
