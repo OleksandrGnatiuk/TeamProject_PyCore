@@ -28,16 +28,44 @@ class Name(Field):
         return self._value.title()
 
 
-class Phone(Field):
 
-    def __str__(self):
-        return self._value
+class Phone(Field):
+    @staticmethod
+    def validate_phone(phone):
+        new_phone = str(phone).strip().replace("+", "").replace(" ", "")
+        if not new_phone.isdigit():
+            raise ValueError("The phone number should contain only numbers!")
+        else:
+            if len(new_phone) == 10:
+                return f"{new_phone}"
+            else:
+                raise ValueError("Check the length of the phone number!")
+
+    def __init__(self, value):
+        self._value = Phone.validate_phone(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Phone.validate_phone(value)
+
 
 
 class Email(Field):
 
-    def __str__(self):
-        return self._value
+    @staticmethod
+    def validate_email(email):
+        pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,}$"
+        if re.match(pattern, email) is not None:
+            return f"{email}"
+        else:
+            raise ValueError("Email is not correct!")
+
+    def __init__(self, value):
+        self._value = Email.validate_email(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Email.validate_email(value)
 
 
 class Address(Field):
