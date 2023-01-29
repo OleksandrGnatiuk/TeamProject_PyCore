@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+notes.bin
+address_book.bin
+tasks.bin
