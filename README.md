@@ -65,7 +65,7 @@ CLI Assistant can:
 
 <p>
 
-- [x] to __search contact__ with < text to search > use command: `search contact <text to search>`
+- [x] to __search contacts__ with < text to search > use command: `search contacts <text to search>`
 - [x] to __see full record of contact__ use command: ` phone <name> `
 - [x] to __see all contacts__ use command: `show addressbook`
 - [x] to __say goodbye__ use one of these commands: `good bye` or `close` or `exit` or ` . `
@@ -96,7 +96,7 @@ ___
 - [x] to __remove task__ use command:  `remove task <ID of task>`
 - [x] to __see all tasks__ use command: `show tasks`
 - [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format dd/mm/yyyy>`
-- [x] to __search in task__ use command: `search task <text_to_search>`
+- [x] to __search tasks__ use command: `search tasks <text_to_search>`
 - [x] to __search tasks of responsible person__ use command: `responsible person <name>`
 
 ___
