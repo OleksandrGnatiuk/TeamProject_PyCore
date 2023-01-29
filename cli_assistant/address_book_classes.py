@@ -28,13 +28,47 @@ class Name(Field):
         return self._value.title()
 
 
-class Phone(Field):
 
-    def __str__(self):
-        return self._value
+class Phone(Field):
+    @staticmethod
+    def validate_phone(phone):
+        new_phone = str(phone).strip().replace("+", "").replace(" ", "")
+        if not new_phone.isdigit():
+            raise ValueError("The phone number should contain only numbers!")
+        else:
+            if len(new_phone) == 10:
+                return f"{new_phone}"
+            else:
+                raise ValueError("Check the length of the phone number!")
+
+    def __init__(self, value):
+        self._value = Phone.validate_phone(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Phone.validate_phone(value)
+
 
 
 class Email(Field):
+
+    @staticmethod
+    def validate_email(email):
+        pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,}$"
+        if re.match(pattern, email) is not None:
+            return f"{email}"
+        else:
+            raise ValueError("Email is not correct!")
+
+    def __init__(self, value):
+        self._value = Email.validate_email(value)
+
+    @Field.value.setter
+    def value(self, value):
+        self._value = Email.validate_email(value)
+
+
+class Address(Field):
 
     def __str__(self):
         return self._value
@@ -56,9 +90,10 @@ class Birthday(Field):
 
 
 class Record:
-    def __init__(self, name, phone=None, email=None, birthday=None):
+    def __init__(self, name, phone=None, email=None, birthday=None, address=None):
         self.name = name
         self.birthday = birthday
+        self.address = address
 
         self.emails = []
         if email:
@@ -145,6 +180,24 @@ class Record:
             return f'Date of birth is not found. Please, add day of birth, if you want. '
 
 
+    """Робота з адресою"""
+
+    def add_address(self, address):
+        address = Address(address)
+        self.address = address
+        print("Address was added")
+
+
+    def delete_address(self, old_address):
+        old_address = Address(old_address)
+        if self.address.value == old_address.value:
+            self.address = 'Не вказано'
+            print("Address was deleted")
+        else:
+            print("Such an address does not exist")
+
+
+
     def contacts(self):
         phon = []
         result_phones = ''
@@ -158,10 +211,12 @@ class Record:
             for i in self.emails:
                 em.append(str(i))
                 result_emails = ", ".join(em)
-        return f"name: {str(self.name.value)};\n" \
+        return f"\nname: {str(self.name.value)};\n" \
                f"phone: {result_phones};\n" \
                f"e-mail: {result_emails};\n" \
-               f"birthday:{self.birthday};\n"
+               f"birthday: {self.birthday};\n" \
+               f"address: {self.address};\n"\
+                "===================\n"
 
 
 class AddressBook(UserDict):
@@ -179,47 +234,52 @@ class AddressBook(UserDict):
         self.data.pop(name)
         print("Record was deleted")
 
-    def get_birthdays_per_week(self, range_of_days=7):
+
+    def search_contact(self, user_search):
+        """search for contacts based on the user's search query"""
+        counter = 0
+        for value in self.data.values():
+            result = str(value.contacts()).lower().find(user_search)
+            if result != -1:
+                counter += 1
+                print (value.contacts())
+        if counter == 0:
+            return f"No data was found for your request. "
+
+
+
+    def get_birthdays_per_range(self, range_of_days=7):
         """a list of users who have a birthday coming up soon"""
+        
+        near_birthdays = {}
         current_date = datetime.now().date()
         for name, value in self.data.items():
-            user_name = name
             user_date = value.birthday.value
             user_date = datetime.strptime(user_date, '%d/%m/%Y').date()
             user_date = user_date.replace(year = current_date.year)
-            day_of_week = user_date.weekday()
             delta_days = user_date - current_date
 
             if 0 < delta_days.days <= range_of_days:
-                if day_of_week == 5 or day_of_week == 6:
-                    near_birthdays['name0'].append(user_name)
-                else:    
-                    near_birthdays[f"name{day_of_week}"].append(user_name)
-            elif 0 < delta_days.days > range_of_days:
-                continue
+                near_birthdays.update({name: user_date})
+            
             else:
                 user_date = user_date.replace(year=user_date.year + 1)
                 delta_days = user_date - current_date
                 if 0 < delta_days.days <= range_of_days:
-                    if day_of_week == 5 or day_of_week == 6:
-                        near_birthdays['name0'].append(user_name)  
-                    else:    
-                        near_birthdays[f"name{day_of_week}"].append(user_name)
+                    near_birthdays.update({name: user_date})
+
                 elif 0 < delta_days.days > range_of_days:
                     continue
-        for i in range(5):
-            if near_birthdays[f"name{i}"] == []:
-                continue
-            else:
-                print(near_birthdays[f"day{i}"]+':', ", ".join(near_birthdays[f"name{i}"]))
+                
+        print(f"\nNear birthdays for next {range_of_days} days:")
+        sorted_near_birthdays = dict(sorted(near_birthdays.items(), key=lambda item:item[1]))
+        result  = ''
+        for key, value in sorted_near_birthdays.items():
+            s = f"{key}'s birthday will be on {str(value)}\n"
+            result += s
+        return result
 
-near_birthdays = {
-                'day0': 'Monday', 'name0': [],
-                'day1': 'Tuesday', 'name1': [],
-                'day2': 'Wednesday', 'name2': [],
-                'day3': 'Thurthday', 'name3': [],
-                'day4': 'Friday', 'name4': []
-                }
+
 
 p = Path("address_book.bin")
 address_book = AddressBook()

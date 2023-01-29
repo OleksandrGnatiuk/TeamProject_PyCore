@@ -185,38 +185,41 @@ def change_em(value: str):
         return f"\nContact {name.title()} does not exists.\n"
 
 
-# def add_address(value):
-#     name, address = value.split(" ", 1)
-#     name = name.title()
-#     if name.title() in address_book:
-#         address_book[name.title()].add_adrs(address)
-#         save_to_pickle()
-#         return f"\nThe address for {name.title()} was recorded.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
-#
-#
+def add_adrs(value):
+    name, address = value.split(" ", 1)
+    name = name.title()
+    if name.title() in address_book:
+        address_book[name.title()].add_address(address)
+        save_to_pickle()
+        return f"\nThe address for {name.title()} was recorded.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
 
-# def change_address(value):
-#     name, address = value.split(" ", 1)
-#     name = name.title()
-#     if name.strip().lower().title() in address_book:
-#         address_book[name.title()].change_adrs(address)
-#         save_to_pickle()
-#         return f"\nThe address for {name.title()} was changed.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exists.\n"
-#
-#
 
-# def remove_address(value):
-#     name = value.lower().title().strip()
-#     if name.title() in address_book:
-#         address_book[name.title()].delete_adrs()
-#         save_to_pickle()
-#         return f"\nAddress for {name.title()} was delete.\n"
-#     else:
-#         return f"\nContact {name.title()} does not exist.\n"
+
+def change_adrs(value):
+    name, address = value.split(" ", 1)
+    name = name.title()
+    if name.strip().lower().title() in address_book:
+        address_book[name.title()].delete_address(address)
+        address_book[name.title()].add_address(address)
+        save_to_pickle()
+        return f"\nThe address for {name.title()} was changed.\n"
+    else:
+        return f"\nContact {name.title()} does not exists.\n"
+
+
+
+def remove_adrs(value):
+    name = value.lower().title().strip()
+    if name.title() in address_book:
+        address_book[name.title()].delete_address()
+        save_to_pickle()
+        return f"\nAddress for {name.title()} was delete.\n"
+    else:
+        return f"\nContact {name.title()} does not exist.\n"
+
+
 
 def remove_bd(value):
     name = value.lower().title().strip()
@@ -257,7 +260,7 @@ def get_birthdays(value=None):
         period = 7
     else:
         period = int(value.strip())
-    return address_book.get_birthdays_per_week(period)
+    return address_book.get_birthdays_per_range(period)
 
 
 def change_bd(value):
@@ -270,7 +273,14 @@ def change_bd(value):
     else:
         return f"\nContact {name.title()} does not exist.\n"
 
-    
+
+def search(text_to_search: str):
+    """ Search contact where there is 'text_to_search'  """
+
+    return address_book.search_contact(text_to_search)
+
+
+
 def add_the_task(value):
     try:
         name, deadline, text = value.lower().strip().split(" ", 2)
@@ -418,9 +428,9 @@ handlers = {
     "change birthday": change_bd,
     "days to birthday": days_to_bd,
     "birthdays": get_birthdays,
-    # "change address": change_address,
-    # "remove address": remove_address,
-    # "add address": add_address,
+    "change address": change_adrs,
+    "remove address": remove_adrs,
+    "add address": add_adrs,
     "add task": add_the_task,
     "remove task": remove_the_task,
     "task done": done,
@@ -429,7 +439,7 @@ handlers = {
     "search in task": search_t,
     "responsible person": search_responce,
     # "clean-folder": clean_f,
-    # "search": search,
+    "search": search,
 }
 
 # completer = NestedCompleter.from_nested_dict({
