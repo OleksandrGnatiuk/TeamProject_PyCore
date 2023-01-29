@@ -1,14 +1,13 @@
 import pickle
-import re
 from pathlib import Path
-# from prompt_toolkit import prompt
-# from prompt_toolkit.completion import NestedCompleter
-from address_book_classes import *
-from clean_folder import create_folders, sort_files, delete_folders, unpack_archives
-from note_book_classes import *
-from task_list_classes import *
-from exceptions import *
-from currency import *
+from prompt_toolkit import prompt
+from prompt_toolkit.completion import NestedCompleter
+from .address_book_classes import *
+from .clean_folder import create_folders, sort_files, delete_folders, unpack_archives
+from .note_book_classes import *
+from .task_list_classes import *
+from .exceptions import *
+from .currency import *
 
 
 def save_to_pickle():
@@ -29,18 +28,21 @@ def say_goodbye(s=None):
 def new_note(text):
     note_ = RecordNote(text)
     nb.add_new_note(note_)
+    nb.save_to_file()
     return f"\nThe note was created.\n"
 
 @input_error
 def ed_note(value):
     id_, text = value.split(" ", 1)
     nb.to_edit_text(id_, text)
+    nb.save_to_file()
     return f"\nThe note was changed.\n"
 
 @input_error
 def tags(value):
     id_, *tags_ = value.split()
     nb.to_add_tags(id_, list(tags_))
+    nb.save_to_file()
     return f"\nTags for note id:{id_} was added.\n"
 
 @input_error
@@ -49,7 +51,9 @@ def sh_notes(value):
 
 @input_error
 def del_notes(id_):
-    return nb.to_remove_note(id_)
+    nb.to_remove_note(id_)
+    nb.save_to_file()
+    return f'\nNote ID: {id_} was delete.\n'
 
 @input_error
 def search_n(text_to_search):
@@ -209,7 +213,6 @@ def change_adrs(value):
     name, address = value.split(" ", 1)
     name = name.title()
     if name.strip().lower().title() in address_book:
-        address_book[name.title()].delete_address(address)
         address_book[name.title()].add_address(address)
         save_to_pickle()
         return f"\nThe address for {name.title()} was changed.\n"
@@ -349,7 +352,7 @@ def change_d_line(value):
     
 
 @input_error
-def search_t(text_to_search: str):
+def search_in_task(text_to_search: str):
     text = text_to_search.strip().lower()
     return tasklist.search_task(text)
     
@@ -391,7 +394,7 @@ def helps(s=None):
     14) to change birthday, write command: change birthday <name> <new_birthday>
     14) to see how many days to contact's birthday, write command: days to birthday <name>
     15) to see list of birthdays in period, write command: birthdays <number of days>
-    16) to search contact, where is 'text', write command: search <text>
+    16) to search contact, where is 'text', write command: search contact <text>
     17) to see full record of contact, write: phone <name>
     18) to see all contacts, write command: show addressbook
     19) to say goodbye, write one of these commands: good bye / close / exit / . 
@@ -450,71 +453,77 @@ handlers = {
     "task done": done,
     "show tasks": show_tasks,
     "change deadline": change_d_line,
-    "search in task": search_t,
+    "search in task": search_in_task,
     "responsible person": search_responce,
-    "search": search,
+    "search contact": search,
     "clean-folder": clean_f,
 }
 
-# completer = NestedCompleter.from_nested_dict({
-#     "add":{
-#         "contact": {"<name> <phone> <phone> ... <phone>"},
-#         "phone": {"<name> <one phone>"},
-#         "email": {"<name> <e-mail>"},
-#         "address": {"<name> <address>"},
-#         "birthday": {"<name> <yyyy-m-d>"},
-#         "note": {"<text>"},
-#         "tags": {"<id> <tag1 tag2 tag3...>"},
-#         },
-#     "remove": {
-#         "contact": {"<name>"},
-#         "phone": {"<name> <old phone>"},
-#         "email": {"<name>"},
-#         "address": {"<name>"},
-#         "birthday": {"<name>"},
-#         "note": {"<id>"},
-#         },
-#     "change": {
-#         "phone": {"<name> <old phone> <new phone>"},
-#         "email": {"<name> <new e-mail>"},
-#         "address": {"<name> <new address>"},
-#         "notes": {"<id> <edited text>"},
-#         },
-#     "phone": {"<name>"},
-#     "search": {
-#         "<text>": None,
-#         "notes": {"<text_to_search>"},
-#         "tags ": {"<tag_to_search>"},
-#         },
-#     "good bye": None,
-#     "close": None,
-#     "exit": None,
-#     "show": {
-#         "addressbook": None,
-#         "notes": None,
-#         },
-#     "note": {"<id>"},
-#     "days to birthday":{"<name>"},
-#     "birthdays": {"<number of days>"},
-#     "clean-folder": {"<path to folder>"},
-#     "hello": None,
-#     "help": None,
-#     "currency": {
-#         'USD': None,
-#         'EUR': None,
-#         'PLN': None,
-#         'GBP': None,
-#         'CZK': None,
-#         'CNY': None,
-#         'CAD': None,
-#     }
-# })
+completer = NestedCompleter.from_nested_dict({
+    "add":{
+        "contact": {"<name> <phone> <phone> ... <phone>"},
+        "phone": {"<name> <one phone>"},
+        "email": {"<name> <e-mail>"},
+        "address": {"<name> <address>"},
+        "birthday": {"<name> <yyyy-m-d>"},
+        "note": {"<text>"},
+        "tags": {"<id> <tag1 tag2 tag3...>"},
+        "task": {"<name> <yyyy-m-d> <text of task>"},
+        },
+    "remove": {
+        "contact": {"<name>"},
+        "phone": {"<name> <old phone>"},
+        "email": {"<name>"},
+        "address": {"<name>"},
+        "birthday": {"<name>"},
+        "note": {"<id>"},
+        "task": {"<ID of task>"},
+        },
+    "change": {
+        "phone": {"<name> <old phone> <new phone>"},
+        "email": {"<name> <new e-mail>"},
+        "address": {"<name> <new address>"},
+        "notes": {"<id> <edited text>"},
+        "deadline": {"<ID of task> <yyyy-m-d>"},
+        },
+    "phone": {"<name>"},
+    "search": {
+        "notes": {"<text_to_search>"},
+        "tags ": {"<tag_to_search>"},
+        "task": {"<text_to_seach>"},
+        "contact": {"<text_to_seach>"},
+        },
+    "good bye": None,
+    "close": None,
+    "exit": None,
+    "show": {
+        "addressbook": None,
+        "notes": None,
+        "tasks": None,
+        },
+    "note": {"<id>"},
+    "days to birthday":{"<name>"},
+    "birthdays": {"<number of days>"},
+    "clean-folder": {"<path to folder>"},
+    "hello": None,
+    "help": None,
+    "responsible person": {"<name>"},
+    "currency": {
+        'USD': None,
+        'EUR': None,
+        'PLN': None,
+        'GBP': None,
+        'CZK': None,
+        'CNY': None,
+        'CAD': None,
+    }
+})
 
 
 def main():
     while True:
-        # command = prompt('Enter command: ', completer=completer)
-        command = input('Enter command: ')
+        command = prompt('Enter command: ', completer=completer)
+        # command = input('Enter command: ')
         command = command.strip().lower()
         if command in ("exit", "close", "good bye", "."):
             say_goodbye()

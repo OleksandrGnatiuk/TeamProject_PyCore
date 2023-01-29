@@ -1,4 +1,3 @@
-# from address_book_classes import LetterInPhoneError, WrongLengthPhoneError, EmailError
 
 
 def input_error(func):
@@ -14,13 +13,5 @@ def input_error(func):
             return "This record is not correct!"
         except IndexError:
             return "This command is wrong"
-        # except LetterInPhoneError:
-        #     return "There is letter in phone number!"
-        # except WrongLengthPhoneError:
-        #     return "Length of phone's number is wrong!"
-        # except EmailError:
-        #     return "E-mail is wrong!"
-        # except Exception:
-        #     return "Mistake"
 
     return wrapper

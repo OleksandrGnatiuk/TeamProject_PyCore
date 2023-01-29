@@ -106,7 +106,7 @@ class Notebook:
             if text_to_search.lower().strip() in value.note.lower():
                 tgs = [tg.word for tg in value.tags]
                 tags = ", ".join(tgs)
-                result = f"id: {id_}    date: {value.date} \n{value.note}\ntags: {tags} \n========\n "
+                result = f"=== id: {id_} ===   date: {value.date} \n{value.note}\ntags: {tags} \n========\n "
                 print(result)
 
     def search_tag(self, tag_to_search: str):

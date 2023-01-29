@@ -44,7 +44,7 @@ class Task:
 
     def __str__(self):
         self.is_in_time()
-        return f"\nDEADLINE: {self.deadline.date()}\n\nTASK: {self.text}\n\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n============="
+        return f"\nDEADLINE: {self.deadline.date()}\n\nTASK: {self.text}\n\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n=============\n"
 
    
 
@@ -87,7 +87,7 @@ class TaskList:
 
     def search_task(self, text_to_search):  # шукаємо завдання по тексту
         for task in self.task_lst.values():
-            if text_to_search.lower() in task.text.lower():
+            if text_to_search.strip().lower() in task.text.lower():
                 print(str(task))
 
 
@@ -118,39 +118,3 @@ if file.exists():
             tasklist.cnt = max(ids)
         else:
             tasklist.cnt = 0
-
-
-if __name__ == "__main__":
-
-    sasha = ResponsiblePerson("Sasha")
-    oleg = ResponsiblePerson("Oleg")
-    artem = ResponsiblePerson("Artem")
-    anastasiya = ResponsiblePerson("Anastasiya")
-
-    task_1 = Task("Написати функцію", sasha, "2023-1-27")
-    # task_2 = Task("Написати класи та методи", oleg, "2023-1-28")
-    # task_3 = Task("Створити хендлер", oleg, "2023-1-29")
-    # task_4 = Task("Підготувати презентацію", anastasiya, "2023-1-30")
-
-    # print(task_1)
-    task_1.well_done()
-    # task_1.in_time()
-    # print(task_1)
-
-    to_do = TaskList()
-
-    to_do.add_task(task_1)
-    # to_do.add_task(task_2)
-    # to_do.add_task(task_3)
-    # to_do.add_task(task_4)
-
-    # to_do.show_all_tasks()
-
-    # to_do.change_deadline(1, '2023-3-1')
-
-    to_do.show_all_tasks()
-
-    # to_do.save_to_file()
-
-    # to_do.search_task("підготувати")
-    # print(to_do.search_respons_person("oleg"))
