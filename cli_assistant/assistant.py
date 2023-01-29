@@ -453,9 +453,9 @@ handlers = {
     "task done": done,
     "show tasks": show_tasks,
     "change deadline": change_d_line,
-    "search in task": search_in_task,
+    "search tasks": search_in_task,
     "responsible person": search_responce,
-    "search contact": search,
+    "search contacts": search,
     "clean-folder": clean_f,
 }
 
@@ -490,8 +490,8 @@ completer = NestedCompleter.from_nested_dict({
     "search": {
         "notes": {"<text_to_search>"},
         "tags ": {"<tag_to_search>"},
-        "task": {"<text_to_seach>"},
-        "contact": {"<text_to_seach>"},
+        "contacts": {"<text_to_seach>"},
+        "tasks": {"<text_to_seach>"},
         },
     "good bye": None,
     "close": None,

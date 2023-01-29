@@ -68,11 +68,14 @@ class TaskList:
 
 
     def show_all_tasks(self):  # виводимо перелік всіх завдань
-        result = '\n'
-        for k, v in self.task_lst.items():
-            s= f"=== ID: {k} ==={v}\n"
-            result += s
-        return result
+        if len(self.task_lst) > 0:
+            result = '\n'
+            for k, v in self.task_lst.items():
+                s= f"=== ID: {k} ==={v}\n"
+                result += s
+            return result
+        else:
+            return f"\nTask book is empty.\n"
 
 
     def change_deadline(self, ID, new_deadline):  
