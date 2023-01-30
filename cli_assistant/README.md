@@ -98,6 +98,8 @@ ___
 - [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format dd/mm/yyyy`
 - [x] to __search tasks__ use command: `search tasks <text_to_search>`
 - [x] to __search tasks of responsible person__ use command: `responsible person <name>`
+- [x] to __set status of task 'done'__ use command: `done <id>`
+
 
 ___
 <p>
@@ -144,7 +146,7 @@ ___
 ___
 
 
-### Our TEAM:
+### OTA TEAM:
 <p> 
 Oleksandr Gnatiuk (Team Lead) <p>
 Anastasiia Kholodko (Scrum Master) <p>

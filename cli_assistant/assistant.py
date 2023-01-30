@@ -354,19 +354,20 @@ def change_d_line(value):
             tasklist.change_deadline(Id, new_deadline)
             tasklist.save_to_file()
     return f"\nDeadline for task ID: {Id} was changed.\n"
-    
 
 @input_error
 def search_in_task(text_to_search: str):
     text = text_to_search.strip().lower()
     return tasklist.search_task(text)
     
-
 @input_error
 def search_responce(name):
     name = name.strip().lower()
     return tasklist.search_respons_person(name)
 
+@input_error
+def well_done(id):
+    return tasklist.set_done(id)
 
 @input_error
 def clean_f(path):
@@ -379,8 +380,7 @@ def clean_f(path):
         sort_files(p)
         delete_folders(p)
         unpack_archives(p)  
-
-        
+       
 def helps(s=None):
     rules = """LIST OF COMMANDS: \n
     1) to add new contact and one or more phones, write command: add contact <name> <phone> <phone> ... <phone>
@@ -423,8 +423,9 @@ def helps(s=None):
     35) to change deadline of task use command: change deadline <ID of task> <new deadline in format dd/mm/yyyy>
     36) to search tasks use command: search tasks <text_to_search>
     37) to search tasks of responsible person use command: responsible person <name>
+    38) to set status of task "done" use command: done <ID of tasl>
 
-    38) to see rate of currency use command: currency <name of currency>: 
+    39) to see rate of currency use command: currency <name of currency>: 
     """
     return rules
 
@@ -471,6 +472,7 @@ handlers = {
     "responsible person": search_responce,
     "search contacts": search,
     "clean-folder": clean_f,
+    "done": well_done,
 }
 
 completer = NestedCompleter.from_nested_dict({
@@ -522,6 +524,7 @@ completer = NestedCompleter.from_nested_dict({
     "clean-folder": {"<path to folder>"},
     "hello": None,
     "help": None,
+    "done": {"<ID of task>"},
     "responsible person": {"<name>"},
     "currency": {
         'USD': None,

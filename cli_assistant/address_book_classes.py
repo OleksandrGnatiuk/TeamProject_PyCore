@@ -29,9 +29,11 @@ class Name(Field):
 
 
 class Phone(Field):
+
     @staticmethod
     def validate_phone(phone):
-        new_phone = str(phone).strip().replace("+", "").replace(" ", "")
+        new_phone = str(phone).strip().replace("+", "").replace(" ", "")\
+            .replace("(", "").replace(")", "").replace("-", "")
         if not new_phone.isdigit():
             raise ValueError("The phone number should contain only numbers!")
         else:
@@ -89,6 +91,7 @@ class Birthday(Field):
 
 
 class Record:
+
     def __init__(self, name, phone=None, email=None, birthday=None, address=None):
         self.name = name
         self.birthday = birthday
@@ -106,7 +109,6 @@ class Record:
     def add_phone(self, phone):
         phone = Phone(phone)
         self.phones.append(phone)
-        # print("Phone was added")
 
     def change_phone(self, old_phone, new_phone):
         old_phone = Phone(old_phone)
@@ -114,20 +116,17 @@ class Record:
         for phone in self.phones:
             if phone.value == old_phone.value:
                 phone.value = new_phone.value
-                # print("\nphone was changed\n")
 
     def delete_phone(self, old_phone):
         old_phone = Phone(old_phone)
         for phone in self.phones:
             if phone.value == old_phone.value:
                 self.phones.remove(phone)
-                # print("\nPhone was deleted\n ")
 
     """Робота з e-mail"""
     def add_email(self, email):
         email = Email(email)
         self.emails.append(email)
-        # print("\nEmail was added\n")
 
     def change_email(self, old_email, new_email):
         old_email = Email(old_email)
@@ -135,21 +134,18 @@ class Record:
         for email in self.emails:
             if email.value == old_email.value:
                 email.value = new_email.value
-                # print("\nEmail was changed\n")
 
     def delete_email(self, old_email):
         old_email = Email(old_email)
         for email in self.emails:
             if email.value == old_email.value:
                 self.emails.remove(email)
-                # print("\nEmail was deleted\n")
 
     """Робота з датою народження"""
     def add_birthday(self, birthday):
         """Adding date of birth"""
         birthday = Birthday(birthday)
         self.birthday = birthday
-        # print("\nDate of birth was added\n")
 
 
     def delete_birthday(self):
@@ -184,21 +180,9 @@ class Record:
     def add_address(self, address):
         address = Address(address)
         self.address = address
-        # print("Address was added")
-
-
-    # def delete_address(self, old_address):
-    #     old_address = Address(old_address)
-    #     if self.address.value == old_address.value:
-    #         self.address = 'Не вказано'
-    #         print("Address was deleted")
-    #     else:
-    #         print("Such an address does not exist")
 
     def delete_address(self):
         self.address = None
-
-
 
     def contacts(self):
         phon = []
@@ -234,8 +218,6 @@ class AddressBook(UserDict):
 
     def del_record(self, name):
         self.data.pop(name)
-        # print("Record was deleted")
-
 
     def search_contact(self, user_search):
         """search for contacts based on the user's search query"""
@@ -247,8 +229,6 @@ class AddressBook(UserDict):
                 print (value.contacts())
         if counter == 0:
             return f"No data was found for your request. "
-
-
 
     def get_birthdays_per_range(self, range_of_days=7):
         """a list of users who have a birthday coming up soon"""

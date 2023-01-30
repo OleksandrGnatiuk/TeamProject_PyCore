@@ -14,7 +14,6 @@ def is_id_exist(func):
             return result
         else:
             return f"\nThe note with id={id_} is not exists\n"
-
     return wrapper
 
 
