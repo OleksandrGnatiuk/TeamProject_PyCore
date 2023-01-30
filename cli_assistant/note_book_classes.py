@@ -29,7 +29,7 @@ class RecordNote:
 
     def __init__(self, note: str):
         self.note = note
-        self.tags = set()
+        self.tags = []
         self.date = datetime.now().date()
 
     def edit_text(self, text_):
@@ -37,7 +37,7 @@ class RecordNote:
 
     def add_tags(self, tags: list[str]):
         for tg in tags:
-            self.tags.add(Tag(tg))
+            self.tags.append(Tag(tg))
 
     def __del__(self):
         return f"\nThe Note was delete.\n"
@@ -64,9 +64,9 @@ class Notebook:
             pickle.dump(cls.notes, fh)
 
     def add_new_note(self, note: RecordNote):
-        id_ = self.counter + 1
-        self.notes[id_] = note
         Notebook.counter += 1
+        self.id_ = Notebook.counter
+        self.notes[self.id_] = note
         self.save_to_file()
 
     def show_all_notes(self):
@@ -126,8 +126,16 @@ if file.exists():
     with open("notes.bin", "rb") as f:
         dct = pickle.load(f)
         nb.notes.update(dct)
+    if len(nb.notes) > 0:
         ids = [int(i) for i in nb.notes]
-        if len(ids) > 0:
-            nb.counter = max(ids)
-        else:
-            nb.counter = 0
+        nb.counter = max(ids)
+    else:
+        nb.counter = 0
+
+if __name__ == "__main__":
+    nb.add_new_note(RecordNote("101"))
+    nb.add_new_note(RecordNote("202"))
+    nb.add_new_note(RecordNote("303"))
+    nb.add_new_note(RecordNote("404"))
+    nb.add_new_note(RecordNote("505"))
+    print(nb.show_all_notes())

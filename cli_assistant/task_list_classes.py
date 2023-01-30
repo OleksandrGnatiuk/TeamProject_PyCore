@@ -115,7 +115,7 @@ if file.exists():
         dct = pickle.load(f)
         tasklist.task_lst.update(dct)
         ids = [int(i) for i in tasklist.task_lst]
-        if len(ids) > 0:
-            tasklist.cnt = max(ids)
-        else:
-            tasklist.cnt = 0
+    if len(ids) > 0:
+        tasklist.cnt = max(ids)
+    else:
+        tasklist.cnt = 0
