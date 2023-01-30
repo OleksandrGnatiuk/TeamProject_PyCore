@@ -1,5 +1,4 @@
 ## Command project by OTA Team
-![logo of team](C:\Users\Rezerv\Desktop\photo_2023-01-30_14-26-02.jpg "logo")
 
 ## Personal assistant
 This project represents the implementation of a personal assistant with a command line interface (CLI). 
