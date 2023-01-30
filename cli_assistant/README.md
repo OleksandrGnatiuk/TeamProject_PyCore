@@ -6,7 +6,7 @@ The project is installed as a Python package and can be called anywhere in the s
 This simple python app will help you to manage: 
 _your address book_ , _your notes_ , _your list of task_ (with the responsible persons and deadlines), _sort files on your computer_ , _have rate of currency_ (used API website of NBU).
 
-This project was written in the **OOP paradigm**, the following libraries were used: **re, datetime, pathlib, collections, shutil, prompt_toolkit, requests, json, pickle**.
+This project was written in the **OOP paradigm**, the following libraries were used: **re, datetime, pathlib, collections, shutil, prompt_toolkit, requests, pickle, pyttsx3**.
 The address book and note book save to **pickle** file.
 
 
@@ -117,21 +117,21 @@ ___
 
 - [ ] if this folder is not exists, you'll see a message in console.
 - [ ] The script sorts files according to file's extensions and replaces files to the destination folders.
-- [ ] Default destination folders are `documents`, `images`, `video`, `audio` and `archives`.
-- [ ] if you want to set your own rules of sorting files you have to change **extension_dict.json** file:
+- [ ] Default destination folders are `documents`, `images`, `video`, `music`, `archives` and `unknown`.
+- [ ] if you want to set your own rules of sorting files you have to change **extensions** dict:
 
-  ```text
-  {
-  "documents": [".doc", ".docx", ".xls", ".xlsx", ".txt", ".pdf"],
-  "audio": [".mp3", ".ogg", ".wav", ".amr"],
-  "video": [".avi", ".mp4", ".mov", ".mkv"],
-  "images": [".jpeg", ".png", ".jpg", ".svg"],
-  "archives": [".zip", ".gz", ".tar"],
-  }
+  ```python
+  extensions = {
+    "images": ['.jpeg', '.png', '.jpg', '.svg'],
+    "video": ['.avi', '.mp4', '.mov', '.mkv'],
+    "documents": ['.doc', '.docx', '.txt', '.pdf', '.xlsx', '.pptx'],
+    "music": ['.mp3', '.ogg', '.wav', '.amr'],
+    "archives": ['.zip', '.gz', '.tar'],
+    "unknown": [""]
+    }
   ```
 
 - [ ] All files with relevant extensions will be moved to these folders;
-- [ ] Other files will be replaced to folder `other`;
 - [ ] if these folders were not exist it will be created;
 - [ ] The script recursively checks all subfolders and replaces all files to destination folders;
 - [ ] Empty folders will be deleted;

@@ -12,6 +12,7 @@ setup(name='assistant_team_project',
       install_requires=[
             'markdown',
             'prompt_toolkit',
+            'pyttsx3',
             'requests',
             ],
       entry_points={'console_scripts': ['assistant = cli_assistant.assistant:main']})

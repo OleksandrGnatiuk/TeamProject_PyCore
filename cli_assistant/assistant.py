@@ -8,6 +8,7 @@ from .note_book_classes import *
 from .task_list_classes import *
 from .exceptions import *
 from .currency import *
+import pyttsx3
 
 
 def save_to_pickle():
@@ -65,6 +66,10 @@ def search_t(tag_to_search):
 
 @input_error
 def note(id_):
+    s = pyttsx3.init()
+    data = nb.notes[int(id_)].note
+    s.say(data)
+    s.runAndWait()
     return nb.show_note(id_)
 
 @input_error
