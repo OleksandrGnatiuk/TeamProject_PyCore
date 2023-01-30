@@ -1,4 +1,4 @@
-## Command project of Team 4
+## Command project by OTA Team
 
 ## Personal assistant
 This project represents the implementation of a personal assistant with a command line interface (CLI). 
