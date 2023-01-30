@@ -498,7 +498,7 @@ completer = NestedCompleter.from_nested_dict({
         "email": {"<name> <new e-mail>"},
         "birthday": {"<name> <d/m/yyyy>"},
         "address": {"<name> <new address>"},
-        "notes": {"<id> <edited text>"},
+        "note": {"<id> <edited text>"},
         "deadline": {"<ID of task> <d/m/yyyy>"},
         },
     "phone": {"<name>"},
