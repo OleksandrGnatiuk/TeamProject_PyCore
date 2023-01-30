@@ -10,6 +10,7 @@ def get_currency(currencyname):
         content = requests.get(URL)
         headers = {'User-Agent':'Mozilla/5.0'}
         result = json.loads(content.text)[0]
-    except:
-        f"Problems with network"
-    return f"\n{result['exchangedate']}  {result['txt']}: {result['rate']}\n"
+    except Exception:
+        return "Problems with network"
+    else:
+        return f"\n{result['exchangedate']}  {result['txt']}: {result['rate']}\n"
