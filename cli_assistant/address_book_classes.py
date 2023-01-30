@@ -31,7 +31,8 @@ class Name(Field):
 class Phone(Field):
     @staticmethod
     def validate_phone(phone):
-        new_phone = str(phone).strip().replace("+", "").replace(" ", "")
+        new_phone = str(phone).strip().replace("+", "").replace(" ", "")\
+            .replace("(", "").replace(")", "").replace("-", "")
         if not new_phone.isdigit():
             raise ValueError("The phone number should contain only numbers!")
         else:
@@ -285,10 +286,10 @@ if p.exists():
 
 if __name__ == "__main__":
     user_1 = Name("User_1")
-    user_1_phone = Phone("1234567890")
+    user_1_phone = Phone("123   4567890")
     user_1_email = Email("user1@gmail.com")
     user_1_rec = Record(user_1, user_1_phone, user_1_email)
-    user_1_rec.add_phone("0970123546")
+    user_1_rec.add_phone("(097)012-35-4     6")
     user_1_rec.add_phone("0920193546")
     user_1_rec.add_phone("0970125346")
     user_1_rec.add_email("ar@gmail.com")
