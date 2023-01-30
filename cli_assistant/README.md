@@ -6,7 +6,7 @@ The project is installed as a Python package and can be called anywhere in the s
 This simple python app will help you to manage: 
 _your address book_ , _your notes_ , _your list of task_ (with the responsible persons and deadlines), _sort files on your computer_ , _have rate of currency_ (used API website of NBU).
 
-This project was written in the **OOP paradigm**, the following libraries were used: **re, datetime, pathlib, collections, shutil, prompt_toolkit, requests, json, pickle**.
+This project was written in the **OOP paradigm**, the following libraries were used: **re, datetime, pathlib, collections, shutil, prompt_toolkit, requests, pickle, pyttsx3**.
 The address book and note book save to **pickle** file.
 
 
