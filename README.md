@@ -95,7 +95,7 @@ ___
 - [x] to __add task__ use command:  `add task <name of responsible persons> <deadline in format dd/mm/yyyy> <text of task>`
 - [x] to __remove task__ use command:  `remove task <ID of task>`
 - [x] to __see all tasks__ use command: `show tasks`
-- [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format dd/mm/yyyy>`
+- [x] to __change deadline of task__ use command: `change deadline <ID of task> <new deadline in format dd/mm/yyyy`
 - [x] to __search tasks__ use command: `search tasks <text_to_search>`
 - [x] to __search tasks of responsible person__ use command: `responsible person <name>`
 
@@ -117,21 +117,21 @@ ___
 
 - [ ] if this folder is not exists, you'll see a message in console.
 - [ ] The script sorts files according to file's extensions and replaces files to the destination folders.
-- [ ] Default destination folders are `documents`, `images`, `video`, `audio` and `archives`.
-- [ ] if you want to set your own rules of sorting files you have to change **extension_dict.json** file:
+- [ ] Default destination folders are `documents`, `images`, `video`, `music`, `archives` and `unknown`.
+- [ ] if you want to set your own rules of sorting files you have to change **extensions** dict:
 
-  ```text
-  {
-  "documents": [".doc", ".docx", ".xls", ".xlsx", ".txt", ".pdf"],
-  "audio": [".mp3", ".ogg", ".wav", ".amr"],
-  "video": [".avi", ".mp4", ".mov", ".mkv"],
-  "images": [".jpeg", ".png", ".jpg", ".svg"],
-  "archives": [".zip", ".gz", ".tar"],
-  }
+  ```python
+  extensions = {
+    "images": ['.jpeg', '.png', '.jpg', '.svg'],
+    "video": ['.avi', '.mp4', '.mov', '.mkv'],
+    "documents": ['.doc', '.docx', '.txt', '.pdf', '.xlsx', '.pptx'],
+    "music": ['.mp3', '.ogg', '.wav', '.amr'],
+    "archives": ['.zip', '.gz', '.tar'],
+    "unknown": [""]
+    }
   ```
 
 - [ ] All files with relevant extensions will be moved to these folders;
-- [ ] Other files will be replaced to folder `other`;
 - [ ] if these folders were not exist it will be created;
 - [ ] The script recursively checks all subfolders and replaces all files to destination folders;
 - [ ] Empty folders will be deleted;
