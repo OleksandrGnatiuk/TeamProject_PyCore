@@ -20,7 +20,7 @@ class Task:
         self.text = text.capitalize()
         self.person = person
 
-        y, m, d = deadline.split("-")
+        d, m, y = deadline.split("/")
         self.deadline = datetime(year=int(y), month=int(m), day=int(d))
 
         self.status = "in process"
@@ -81,7 +81,7 @@ class TaskList:
     def change_deadline(self, ID, new_deadline):  
         '''змінюємо термін виконання завдання по ID'''
 
-        y, m, d = new_deadline.split("-")
+        d, m, y = new_deadline.split("/")
         new_deadline = datetime(year=int(y), month=int(m), day=int(d))
 
         if int(ID) in self.task_lst:

@@ -305,7 +305,7 @@ def add_the_task(value):
         tasklist.add_task(task)
         tasklist.save_to_file()
     except Exception:
-        f"Please white command in format 'add task <name> <deadline in format: YYYY-m-d> <task>'"
+        f"\nPlease white command in format 'add task <name> <deadline in format: YYYY-m-d> <task>'\n"
     else:
         return f"\nThe task was created.\n"
 
@@ -315,7 +315,7 @@ def remove_the_task(value):
     try:
         Id = int(value.strip())
     except TypeError:
-        f"Please white command in format 'remove task <ID>'"
+        f"\nPlease white command in format 'remove task <ID>'\n"
     else:
         tasklist.remove_task(Id)
         tasklist.save_to_file()
@@ -330,12 +330,12 @@ def done(value):
     try:
         Id = int(value.strip())
     except TypeError:
-        f"Please white command in format 'task done <ID>'"
+        f"\nPlease white command in format 'task done <ID>'\n"
     else:
         if Id in tasklist.task_lst:
             tasklist.task_lst[Id].well_done()
             tasklist.save_to_file()
-    return f"Status of task ID: {Id} is 'done'"
+    return f"\nStatus of task ID: {Id} is 'done'\n"
 
 @input_error
 def change_d_line(value):
@@ -343,12 +343,12 @@ def change_d_line(value):
     try:
         Id = int(Id)
     except TypeError:
-        f"Please white command in format 'change deadline <ID> <new deadline>'"
+        f"\nPlease white command in format 'change deadline <ID> <new deadline>'\n"
     else:
         if Id in tasklist.task_lst:
             tasklist.change_deadline(Id, new_deadline)
             tasklist.save_to_file()
-    return f"Deadline for task ID: {Id} was changed"
+    return f"\nDeadline for task ID: {Id} was changed.\n"
     
 
 @input_error
@@ -392,25 +392,34 @@ def helps(s=None):
     12) to add birthday of contact, write command: add birthday <name> <dd/mm/yyyy>
     13) to remove birthday, write command: remove birthday <name>
     14) to change birthday, write command: change birthday <name> <new_birthday>
-    14) to see how many days to contact's birthday, write command: days to birthday <name>
-    15) to see list of birthdays in period, write command: birthdays <number of days>
-    16) to search contact, where is 'text', write command: search contact <text>
-    17) to see full record of contact, write: phone <name>
-    18) to see all contacts, write command: show addressbook
-    19) to say goodbye, write one of these commands: good bye / close / exit / . 
-    20) to say hello, write command: hello
-    21) to see help, write command: help
-    22) to sort file in folder, write command: clean-folder <path to folder>
-    23) to add note use command: add note <text>
-    24) to change note use command: change note <id> <edited text>
-    25) to add tags use command: add tags <id> <tag1 tag2 tag3...>
-    26) to show all notes use command: show notes
-    27) to show any note use command: note <id>
-    28) to remove note use command: remove note <id>
-    29) to search notes use command: search notes <text_to_search>
-    30) to search tags use command: search tags <tag_to_search>
+    15) to see how many days to contact's birthday, write command: days to birthday <name>
+    16) to see list of birthdays in period, write command: birthdays <number of days>
+    17) to search contact, where is 'text', write command: search contact <text>
+    18) to see full record of contact, write: phone <name>
+    19) to see all contacts, write command: show addressbook
+    20) to say goodbye, write one of these commands: good bye / close / exit / . 
+    21) to say hello, write command: hello
+    22) to see help, write command: help
+    
+    23) to sort file in folder, write command: clean-folder <path to folder>
+    
+    24) to add note use command: add note <text>
+    25) to change note use command: change note <id> <edited text>
+    26) to add tags use command: add tags <id> <tag1 tag2 tag3...>
+    27) to show all notes use command: show notes
+    28) to show any note use command: note <id>
+    29) to remove note use command: remove note <id>
+    30) to search notes use command: search notes <text_to_search>
+    31) to search tags use command: search tags <tag_to_search>
+    
+    32)  to add task use command: add task <name of responsible persons> <deadline in format dd/mm/yyyy> <text of task>
+    33) to remove task use command: remove task <ID of task>
+    34) to see all tasks use command: show tasks
+    35) to change deadline of task use command: change deadline <ID of task> <new deadline in format dd/mm/yyyy>
+    36) to search tasks use command: search tasks <text_to_search>
+    37) to search tasks of responsible person use command: responsible person <name>
 
-    31) to see rate of currency use command: currency <name of currency>: 
+    38) to see rate of currency use command: currency <name of currency>: 
     """
     return rules
 
