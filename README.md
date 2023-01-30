@@ -59,7 +59,7 @@ CLI Assistant can:
 
 - [x] to __add birthday of contact__ use command: ` add birthday <name> <dd/mm/yyyy> `
 - [x] to __remove birthday__, write command: ` remove birthday <name> `
-- [x] to __change birthday__, write command: ` change birthday <name> <birthday>`
+- [x] to __change birthday__, write command: ` change birthday <name> <dd/mm/yyyy>`
 - [x] to __see how many days to contact's birthday__ use command: `days to birthday <name>`
 - [x] to __see list of birthdays in period__ (sorted by days of birthday) use command: `birthdays <number of days>`
 

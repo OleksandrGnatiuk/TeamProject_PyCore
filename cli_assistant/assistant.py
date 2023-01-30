@@ -391,7 +391,7 @@ def helps(s=None):
     11) to remove address, write command: remove address <name>
     12) to add birthday of contact, write command: add birthday <name> <dd/mm/yyyy>
     13) to remove birthday, write command: remove birthday <name>
-    14) to change birthday, write command: change birthday <name> <new_birthday>
+    14) to change birthday, write command: change birthday <name> <d/m/yyyy>
     15) to see how many days to contact's birthday, write command: days to birthday <name>
     16) to see list of birthdays in period, write command: birthdays <number of days>
     17) to search contact, where is 'text', write command: search contact <text>
@@ -474,10 +474,10 @@ completer = NestedCompleter.from_nested_dict({
         "phone": {"<name> <one phone>"},
         "email": {"<name> <e-mail>"},
         "address": {"<name> <address>"},
-        "birthday": {"<name> <yyyy-m-d>"},
+        "birthday": {"<name> <d/m/yyyy>"},
         "note": {"<text>"},
         "tags": {"<id> <tag1 tag2 tag3...>"},
-        "task": {"<name> <yyyy-m-d> <text of task>"},
+        "task": {"<name> <d/m/yyyy> <text of task>"},
         },
     "remove": {
         "contact": {"<name>"},
@@ -491,9 +491,10 @@ completer = NestedCompleter.from_nested_dict({
     "change": {
         "phone": {"<name> <old phone> <new phone>"},
         "email": {"<name> <new e-mail>"},
+        "birthday": {"<name> <d/m/yyyy>"},
         "address": {"<name> <new address>"},
         "notes": {"<id> <edited text>"},
-        "deadline": {"<ID of task> <yyyy-m-d>"},
+        "deadline": {"<ID of task> <d/m/yyyy>"},
         },
     "phone": {"<name>"},
     "search": {
