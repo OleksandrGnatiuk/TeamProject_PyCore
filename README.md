@@ -7,7 +7,7 @@ This simple python app will help you to manage:
 _your address book_ , _your notes_ , _your list of task_ (with the responsible persons and deadlines), _sort files on your computer_ , _have rate of currency_ (used API website of NBU).
 
 This project was written in the **OOP paradigm**, the following libraries were used: **re, datetime, pathlib, collections, shutil, prompt_toolkit, requests, pickle, pyttsx3**.
-The address book and note book save to **pickle** file.
+The address book, notes, task book save to **pickle** file.
 
 
 ### Installation
@@ -81,7 +81,7 @@ ___
 - [x] to __edit note__ use command:  `change note <id> <edited text>`
 - [x] to __add tags__ use command:  `add tags <id> <tag1 tag2 tag3...>`
 - [x] to __see all notes__ use command: `show notes`
-- [x] to __see any note__ use command: `note <id>`
+- [x] to __see and listen any note__ use command: `note <id>`
 - [x] to __delete note__ use command: `remove note <id>`
 - [x] to __search notes__ use command: `search notes <text_to_search>`
 - [x] to __search tags__ use command: `search tags <tag_to_search>`
