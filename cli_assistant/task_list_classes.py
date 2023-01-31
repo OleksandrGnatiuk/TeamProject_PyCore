@@ -35,9 +35,9 @@ class Task:
             else:
                 self.status = "in process"
 
-    def __str__(self):
+    def see_task(self):
         self.is_in_time()
-        return f"\nDEADLINE: {self.deadline.date()}\n\nTASK: {self.text}\n\nResponsible person: {self.person.name}\nSTATUS:   {self.status}\n=============\n"
+        return f"Respon siblePerson: {self.person.name}   Deadline: {self.deadline.date()}\n\nTask: {self.text}\n\nStatus: {self.status}\n"
 
    
 class TaskList:
@@ -47,7 +47,7 @@ class TaskList:
 
     def __init__(self):
         self.task_lst = {}
-        self.read_from_file()
+        self.read_fr_file()
 
     def add_task(self, task: Task):  # додаємо нове завдання
         TaskList.cnt += 1
@@ -61,11 +61,9 @@ class TaskList:
 
     def show_all_tasks(self):  # виводимо перелік всіх завдань
         if len(self.task_lst) > 0:
-            result = '\n'
             for k, v in self.task_lst.items():
-                s= f"=== ID: {k} ==={str(v)}\n"
-                result += s
-            return result
+                print(f"=== ID: {k} ===  ")
+                
         else:
             return f"\nTask book is empty.\n"
 
@@ -108,9 +106,9 @@ class TaskList:
             pickle.dump(self.task_lst, fh)
 
 
-    def read_from_file(self):
+    def read_fr_file(self):
         try:
-            with open("notes.bin", "rb") as fh:
+            with open("tasks.bin", "rb") as fh:
                 self.task_lst = pickle.load(fh)
                 if self.task_lst:
                     self.cnt = max(self.task_lst.keys())
@@ -119,7 +117,6 @@ class TaskList:
             self.cnt = 0
 
 
-# file = Path("tasks.bin")
 tasklist = TaskList()
 
 # if file.exists():
@@ -131,3 +128,12 @@ tasklist = TaskList()
 #         tasklist.cnt = max(ids)
 #     else:
 #         tasklist.cnt = 0
+
+if __name__ == "__main__":
+
+    sasha = ResponsiblePerson("Sasha")
+
+    task_1 = Task("Купити помідори", sasha, '2/2/2023')
+    tasklist = TaskList()
+    tasklist.add_task(task_1)
+    print(task_1.see_task())
