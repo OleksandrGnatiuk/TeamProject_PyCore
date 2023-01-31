@@ -37,12 +37,11 @@ class Task:
 
     def see_task(self):
         self.is_in_time()
-        return f"Respon siblePerson: {self.person.name}   Deadline: {self.deadline.date()}\n\nTask: {self.text}\n\nStatus: {self.status}\n"
+        return f"Responsible Person: {self.person.name}   Deadline: {self.deadline.date()}\n\nTask: {self.text}\n\nStatus: {self.status}\n"
 
    
 class TaskList:
     """Клас для створення списку завдань"""
-    
     cnt = 0
 
     def __init__(self):
@@ -50,8 +49,8 @@ class TaskList:
         self.read_fr_file()
 
     def add_task(self, task: Task):  # додаємо нове завдання
+        self.task_lst[self.cnt+1] = task
         TaskList.cnt += 1
-        self.task_lst[self.cnt] = task
         self.save_to_file()
 
     def remove_task(self, ID):  # видаляємо завдання по ID
@@ -62,7 +61,7 @@ class TaskList:
     def show_all_tasks(self):  # виводимо перелік всіх завдань
         if len(self.task_lst) > 0:
             for k, v in self.task_lst.items():
-                print(f"=== ID: {k} ===  ")
+                print(v.see_task())
                 
         else:
             return f"\nTask book is empty.\n"
@@ -134,6 +133,9 @@ if __name__ == "__main__":
     sasha = ResponsiblePerson("Sasha")
 
     task_1 = Task("Купити помідори", sasha, '2/2/2023')
+    task_2 = Task("Заправити машину", sasha, '1/2/2023')
     tasklist = TaskList()
     tasklist.add_task(task_1)
-    print(task_1.see_task())
+    tasklist.add_task(task_2)
+    # print(task_1.see_task())
+    print(tasklist.show_all_tasks())
