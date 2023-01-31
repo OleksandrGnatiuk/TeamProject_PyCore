@@ -37,7 +37,7 @@ class Task:
 
     def see_task(self):
         self.is_in_time()
-        return f"Responsible Person: {self.person.name}   Deadline: {self.deadline.date()}\n\nTask: {self.text}\n\nStatus: {self.status}\n"
+        return f"Responsible Person: {self.person.name}     Deadline: {self.deadline.date()}\n\nTask: {self.text}\n\nStatus: {self.status}\n====+==========\n"
 
    
 class TaskList:
@@ -59,10 +59,11 @@ class TaskList:
             self.save_to_file()
 
     def show_all_tasks(self):  # виводимо перелік всіх завдань
+        result = '\n'
         if len(self.task_lst) > 0:
             for k, v in self.task_lst.items():
-                print(v.see_task())
-                
+                result += f"=== ID: {k} ===\n{v.see_task()}\n"
+            return result
         else:
             return f"\nTask book is empty.\n"
 
