@@ -403,6 +403,7 @@ def clean_f(path):
         sort_files(p)
         delete_folders(p)
         unpack_archives(p)
+        return "Done\n"
 
 
 def helps(value):

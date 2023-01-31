@@ -123,5 +123,7 @@ nb = Notebook()
 
 if __name__ == "__main__":
     print(nb.to_add_tags(8, ["jjjjj"]))
+    print(nb.to_remove_note(8, ["jjjjj"]))
+
     nb.to_remove_note(1)
     print(nb.show_all_notes())

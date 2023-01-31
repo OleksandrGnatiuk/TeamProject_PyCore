@@ -152,7 +152,7 @@ def unpack_archives(path: Path):
             try:
                 shutil.unpack_archive(f, path_folder / f.stem)
             except:
-                print(f"Error. {f.name} cannot be unpacked")
+                print(f"WARNING. {f.name} cannot be unpacked")
             finally:
                 continue
     else:
