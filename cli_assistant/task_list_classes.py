@@ -50,7 +50,7 @@ class TaskList:
 
     def add_task(self, task: Task):  # додаємо нове завдання
         self.task_lst[self.cnt+1] = task
-        TaskList.cnt += 1
+        self.cnt += 1
         self.save_to_file()
 
     def remove_task(self, ID):  # видаляємо завдання по ID
