@@ -1,11 +1,9 @@
 import pickle
 from datetime import datetime
-from pathlib import Path
 
 
 def is_id_exist(func):
     """Decorator checks if id exists and it saves changes to pickle-file"""
-
     def wrapper(*args):
         id_ = args[1]
         if int(id_) in args[0].notes:
@@ -13,7 +11,7 @@ def is_id_exist(func):
             args[0].save_to_file()
             return result
         else:
-            return f"\nThe note with id={id_} is not exists\n"
+            return f"\nThe note with ID: {id_} is not exists\n"
     return wrapper
 
 
@@ -123,11 +121,7 @@ class Notebook:
 nb = Notebook()
 
 
-# if __name__ == "__main__":
-#     nb.add_new_note(RecordNote("Привіт Маша"))
-#     nb.add_new_note(RecordNote("Привіт, андрій"))
-#     nb.add_new_note(RecordNote("Софія"))
-#     nb.add_new_note(RecordNote("Рома"))
-#     nb.add_new_note(RecordNote("Саша"))
-#     nb.save_to_file()
-#     print(nb.show_all_notes())
+if __name__ == "__main__":
+    print(nb.to_add_tags(8, ["jjjjj"]))
+    nb.to_remove_note(1)
+    print(nb.show_all_notes())

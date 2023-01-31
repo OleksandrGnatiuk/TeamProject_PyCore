@@ -25,12 +25,14 @@ def say_hello(s=None):
 def say_goodbye(s=None):
     return "\nGood bye!\n"
 
+
 @input_error
 def new_note(text):
     note_ = RecordNote(text)
     nb.add_new_note(note_)
     nb.save_to_file()
     return f"\nThe note was created.\n"
+
 
 @input_error
 def ed_note(value):
@@ -39,6 +41,7 @@ def ed_note(value):
     nb.save_to_file()
     return f"\nThe note was changed.\n"
 
+
 @input_error
 def tags(value):
     id_, *tags_ = value.split()
@@ -46,9 +49,11 @@ def tags(value):
     nb.save_to_file()
     return f"\nTags for note id:{id_} was added.\n"
 
+
 @input_error
 def sh_notes(value):
     return nb.show_all_notes()
+
 
 @input_error
 def del_notes(id_):
@@ -56,21 +61,29 @@ def del_notes(id_):
     nb.save_to_file()
     return f'\nNote ID: {id_} was delete.\n'
 
+
 @input_error
 def search_n(text_to_search):
     return nb.search_note(text_to_search)
+
 
 @input_error
 def search_t(tag_to_search):
     return nb.search_tag(tag_to_search)
 
+
 @input_error
 def note(id_):
-    s = pyttsx3.init()
-    data = nb.notes[int(id_)].note
-    s.say(data)
-    s.runAndWait()
-    return nb.show_note(id_)
+    try:
+        s = pyttsx3.init()
+        data = nb.notes[int(id_)].note
+        s.say(data)
+        s.runAndWait()
+    except Exception:
+        "sound is not available"
+    finally:
+        return nb.show_note(id_)
+
 
 @input_error
 def get_curr(value):
@@ -79,6 +92,7 @@ def get_curr(value):
         return get_currency(currency)
     else:
         return "\nYou need write command in format 'currency <name of currency>'\n"
+
 
 @input_error
 def add_contact(value):
@@ -97,6 +111,7 @@ def add_contact(value):
         return f"\nContact {name.value.title()} was created.\n"
     else:
         return f"\nContact {name.value.title()} already exists.\n"
+
 
 @input_error
 def show_all(s):
@@ -194,7 +209,7 @@ def change_em(value: str):
     name, old_em, new_em = value.split()
 
     if name.strip().lower().title() in address_book:
-        address_book[name.strip().lower().title()].change_email(old_em,new_em)
+        address_book[name.strip().lower().title()].change_email(old_em, new_em)
         save_to_pickle()
         return f"\nThe e-mail for {name.title()} was changed.\n"
     else:
@@ -251,7 +266,6 @@ def remove_bd(value):
 @input_error
 def add_contact_birthday(value):
     name, birthday = value.lower().strip().split()
-    # birthday = tuple(birthday.split("-"))
 
     if name.title() in address_book:
         address_book[name.title()].add_birthday(birthday)
@@ -326,9 +340,11 @@ def remove_the_task(value):
         tasklist.save_to_file()
         return f"\nThe task was delete\n"
 
+
 @input_error
 def show_tasks(value):
     return tasklist.show_all_tasks()
+
 
 @input_error
 def done(value):
@@ -341,6 +357,7 @@ def done(value):
             tasklist.task_lst[Id].well_done()
             tasklist.save_to_file()
     return f"\nStatus of task ID: {Id} is 'done'\n"
+
 
 @input_error
 def change_d_line(value):
@@ -355,33 +372,40 @@ def change_d_line(value):
             tasklist.save_to_file()
     return f"\nDeadline for task ID: {Id} was changed.\n"
 
+
 @input_error
 def search_in_task(text_to_search: str):
     text = text_to_search.strip().lower()
     return tasklist.search_task(text)
-    
+
+
 @input_error
 def search_responce(name):
     name = name.strip().lower()
     return tasklist.search_respons_person(name)
 
+
 @input_error
 def well_done(id):
     return tasklist.set_done(id)
+
 
 @input_error
 def clean_f(path):
     p = Path(path)
     try:
-        create_folders(p) 
+        create_folders(p)
     except FileNotFoundError:
-        print("\nThe folder was not found. Check the folder's path and run the command again!.\n")
+        print(
+            "\nThe folder was not found. Check the folder's path and run the command again!.\n"
+        )
     else:
         sort_files(p)
         delete_folders(p)
-        unpack_archives(p)  
-       
-def helps(s=None):
+        unpack_archives(p)
+
+
+def helps(value):
     rules = """LIST OF COMMANDS: \n
     1) to add new contact and one or more phones, write command: add contact <name> <phone> <phone> ... <phone>
     2) to remove contact, write command: remove contact <name>
@@ -476,7 +500,7 @@ handlers = {
 }
 
 completer = NestedCompleter.from_nested_dict({
-    "add":{
+    "add": {
         "contact": {"<name> <phone> <phone> ... <phone>"},
         "phone": {"<name> <one phone>"},
         "email": {"<name> <e-mail>"},
@@ -485,7 +509,7 @@ completer = NestedCompleter.from_nested_dict({
         "note": {"<text>"},
         "tags": {"<id> <tag1 tag2 tag3...>"},
         "task": {"<name> <d/m/yyyy> <text of task>"},
-        },
+    },
     "remove": {
         "contact": {"<name>"},
         "phone": {"<name> <old phone>"},
@@ -494,7 +518,7 @@ completer = NestedCompleter.from_nested_dict({
         "birthday": {"<name>"},
         "note": {"<id>"},
         "task": {"<ID of task>"},
-        },
+    },
     "change": {
         "phone": {"<name> <old phone> <new phone>"},
         "email": {"<name> <new e-mail>"},
@@ -502,14 +526,14 @@ completer = NestedCompleter.from_nested_dict({
         "address": {"<name> <new address>"},
         "note": {"<id> <edited text>"},
         "deadline": {"<ID of task> <d/m/yyyy>"},
-        },
+    },
     "phone": {"<name>"},
     "search": {
         "notes": {"<text_to_search>"},
         "tags ": {"<tag_to_search>"},
         "contacts": {"<text_to_seach>"},
         "tasks": {"<text_to_seach>"},
-        },
+    },
     "good bye": None,
     "close": None,
     "exit": None,
@@ -517,9 +541,9 @@ completer = NestedCompleter.from_nested_dict({
         "addressbook": None,
         "notes": None,
         "tasks": None,
-        },
+    },
     "note": {"<id>"},
-    "days to birthday":{"<name>"},
+    "days to birthday": {"<name>"},
     "birthdays": {"<number of days>"},
     "clean-folder": {"<path to folder>"},
     "hello": None,
@@ -551,9 +575,6 @@ def main():
                 if key in command:
                     print(handlers[key](command[len(key):].strip()))
                     break
-
-
-
 
 
 if __name__ == "__main__":
