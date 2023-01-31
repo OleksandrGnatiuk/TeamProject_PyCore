@@ -47,6 +47,7 @@ class TaskList:
 
     def __init__(self):
         self.task_lst = {}
+        self.read_from_file()
 
     def add_task(self, task: Task):  # додаємо нове завдання
         TaskList.cnt += 1
@@ -107,15 +108,26 @@ class TaskList:
             pickle.dump(self.task_lst, fh)
 
 
-file = Path("tasks.bin")
+    def read_from_file(self):
+        try:
+            with open("notes.bin", "rb") as fh:
+                self.task_lst = pickle.load(fh)
+                if self.task_lst:
+                    self.cnt = max(self.task_lst.keys())
+        except FileNotFoundError:
+            self.task_lst = {}
+            self.cnt = 0
+
+
+# file = Path("tasks.bin")
 tasklist = TaskList()
 
-if file.exists():
-    with open("tasks.bin", "rb") as f:
-        dct = pickle.load(f)
-        tasklist.task_lst.update(dct)
-        ids = [int(i) for i in tasklist.task_lst]
-    if len(ids) > 0:
-        tasklist.cnt = max(ids)
-    else:
-        tasklist.cnt = 0
+# if file.exists():
+#     with open("tasks.bin", "rb") as f:
+#         dct = pickle.load(f)
+#         tasklist.task_lst.update(dct)
+#         ids = [int(i) for i in tasklist.task_lst]
+#     if len(ids) > 0:
+#         tasklist.cnt = max(ids)
+#     else:
+#         tasklist.cnt = 0

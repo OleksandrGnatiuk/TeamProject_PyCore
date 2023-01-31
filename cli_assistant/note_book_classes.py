@@ -10,7 +10,7 @@ def is_id_exist(func):
         id_ = args[1]
         if int(id_) in args[0].notes:
             result = func(*args)
-            Notebook.save_to_file()
+            args[0].save_to_file()
             return result
         else:
             return f"\nThe note with id={id_} is not exists\n"
@@ -45,29 +45,30 @@ class RecordNote:
 
 class Notebook:
     """Class for creating notes"""
-
-    notes = {}
     counter = 0
 
-    @classmethod
-    def read_from_file(cls):
+    def __init__(self):
+        self.notes = {}
+        self.read_from_file()
+       
+    def add_new_note(self, note: RecordNote):
+        self.notes[self.counter+1] = note
+        self.counter += 1
+        self.save_to_file()
+
+    def read_from_file(self):
         try:
             with open("notes.bin", "rb") as fh:
-                result = pickle.load(fh)
-            return result
+                self.notes = pickle.load(fh)
+                if self.notes:
+                    self.counter = max(self.notes.keys())
         except FileNotFoundError:
-            cls.notes = {}
+            self.notes = {}
+            self.counter = 0
 
-    @classmethod
-    def save_to_file(cls):
+    def save_to_file(self):
         with open("notes.bin", "wb") as fh:
-            pickle.dump(cls.notes, fh)
-
-    def add_new_note(self, note: RecordNote):
-        Notebook.counter += 1
-        self.id_ = Notebook.counter
-        self.notes[self.id_] = note
-        self.save_to_file()
+            pickle.dump(self.notes, fh)
 
     def show_all_notes(self):
         if len(self.notes) > 0:
@@ -119,23 +120,14 @@ class Notebook:
                 print(result)
 
 
-file = Path("notes.bin")
 nb = Notebook()
 
-if file.exists():
-    with open("notes.bin", "rb") as f:
-        dct = pickle.load(f)
-        nb.notes.update(dct)
-    if len(nb.notes) > 0:
-        ids = [int(i) for i in nb.notes]
-        nb.counter = max(ids)
-    else:
-        nb.counter = 0
 
-if __name__ == "__main__":
-    nb.add_new_note(RecordNote("101"))
-    nb.add_new_note(RecordNote("202"))
-    nb.add_new_note(RecordNote("303"))
-    nb.add_new_note(RecordNote("404"))
-    nb.add_new_note(RecordNote("505"))
-    print(nb.show_all_notes())
+# if __name__ == "__main__":
+#     nb.add_new_note(RecordNote("Привіт Маша"))
+#     nb.add_new_note(RecordNote("Привіт, андрій"))
+#     nb.add_new_note(RecordNote("Софія"))
+#     nb.add_new_note(RecordNote("Рома"))
+#     nb.add_new_note(RecordNote("Саша"))
+#     nb.save_to_file()
+#     print(nb.show_all_notes())

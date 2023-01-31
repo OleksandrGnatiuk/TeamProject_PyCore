@@ -13,5 +13,7 @@ def input_error(func):
             return "This record is not correct!"
         except IndexError:
             return "This command is wrong"
+        # except Exception:
+        #     return "Mistake"
 
     return wrapper
