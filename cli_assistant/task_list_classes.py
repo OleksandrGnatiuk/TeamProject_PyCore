@@ -81,7 +81,7 @@ class TaskList:
     def search_task(self, text_to_search):  # шукаємо завдання по тексту
         for task in self.task_lst.values():
             if text_to_search.strip().lower() in task.text.lower():
-                print(str(task))
+                print(task.see_task())
 
 
     def search_respons_person(self, responsible_person: str):  
@@ -90,7 +90,7 @@ class TaskList:
         result = "\n"
         for id, task in self.task_lst.items():
             if responsible_person.title() == task.person.name:
-                result += f'{int(id)}\n{str(task)})'
+                result += f'{int(id)}\n{task.see_task()})'
         return result
 
     def set_done(self, id):
@@ -118,25 +118,3 @@ class TaskList:
 
 
 tasklist = TaskList()
-
-# if file.exists():
-#     with open("tasks.bin", "rb") as f:
-#         dct = pickle.load(f)
-#         tasklist.task_lst.update(dct)
-#         ids = [int(i) for i in tasklist.task_lst]
-#     if len(ids) > 0:
-#         tasklist.cnt = max(ids)
-#     else:
-#         tasklist.cnt = 0
-
-if __name__ == "__main__":
-
-    sasha = ResponsiblePerson("Sasha")
-
-    task_1 = Task("Купити помідори", sasha, '2/2/2023')
-    task_2 = Task("Заправити машину", sasha, '1/2/2023')
-    tasklist = TaskList()
-    tasklist.add_task(task_1)
-    tasklist.add_task(task_2)
-    # print(task_1.see_task())
-    print(tasklist.show_all_tasks())
