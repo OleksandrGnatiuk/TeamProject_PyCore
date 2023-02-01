@@ -127,6 +127,8 @@ def show_all(s):
 
 @input_error
 def remove_contact(name: str):
+    ''' Функція для видалення контакта з книги '''
+
     record = address_book[name.strip().lower().title()]
     address_book.del_record(record.name.value)
     save_to_pickle()
@@ -135,6 +137,8 @@ def remove_contact(name: str):
 
 @input_error
 def add_phone(value):
+    ''' Функція для додавання телефону контакта'''
+
     name, phone = value.lower().strip().title().split()
 
     if name.title() in address_book:
@@ -147,6 +151,7 @@ def add_phone(value):
 
 @input_error
 def remove_phone(value):
+    ''' Функція для видалення телефону контакта '''
     name, phone = value.lower().title().strip().split()
 
     if name.title() in address_book:
@@ -159,6 +164,8 @@ def remove_phone(value):
 
 @input_error
 def change_ph(value: str):
+    ''' Функція для заміни телефону контакта '''
+
     name, old_phone, new_phone = value.split()
 
     if name.strip().lower().title() in address_book:
@@ -172,6 +179,7 @@ def change_ph(value: str):
 @input_error
 def contact(name):
     """ Функція відображає номер телефону абонента, ім'я якого було в команді 'phone ...'"""
+
     if name.title() in address_book:
         record = address_book[name.title()]
         return record.contacts()
@@ -181,6 +189,8 @@ def contact(name):
 
 @input_error
 def add_em(value):
+    ''' Функція для додавання e-mail контакта '''
+
     name, email = value.split()
     name = name.title()
     if name.title() in address_book:
@@ -193,6 +203,8 @@ def add_em(value):
 
 @input_error
 def remove_em(value):
+    ''' Функція для видалення e-mail контакта ''' 
+
     name, email = value.split()
     name = name.title()
     email = email.lower()
@@ -206,6 +218,8 @@ def remove_em(value):
 
 @input_error
 def change_em(value: str):
+    ''' Функція для заміни e-mail контакта '''
+
     name, old_em, new_em = value.split()
 
     if name.strip().lower().title() in address_book:
@@ -218,6 +232,8 @@ def change_em(value: str):
 
 @input_error
 def add_adrs(value):
+    ''' Функція для додавання адреси контакта '''
+
     name, address = value.split(" ", 1)
     name = name.title()
     if name.title() in address_book:
@@ -230,6 +246,8 @@ def add_adrs(value):
 
 @input_error
 def change_adrs(value):
+    ''' Функція для зміни адреси контакта '''
+    
     name, address = value.split(" ", 1)
     name = name.title()
     if name.strip().lower().title() in address_book:
@@ -242,6 +260,8 @@ def change_adrs(value):
 
 @input_error
 def remove_adrs(value):
+    ''' Функція для видалення адреси контакта '''
+    
     name = value.lower().title().strip()
     if name.title() in address_book:
         address_book[name.title()].delete_address()
@@ -253,6 +273,8 @@ def remove_adrs(value):
 
 @input_error
 def remove_bd(value):
+    ''' Функція для видалення дня народження контакта контакта '''
+    
     name = value.lower().title().strip()
 
     if name.title() in address_book:
@@ -265,6 +287,8 @@ def remove_bd(value):
 
 @input_error
 def add_contact_birthday(value):
+    ''' Функція для додавання дня народження контакта к книгу '''
+    
     name, birthday = value.lower().strip().split()
 
     if name.title() in address_book:
@@ -277,6 +301,8 @@ def add_contact_birthday(value):
 
 @input_error
 def days_to_bd(name):
+    ''' Функція виводить кількість днів до дня народження контакта '''
+    
     if name.title() in address_book:
         if not address_book[name.title()].birthday is None:
             days = address_book[name.title()].days_to_birthday()
@@ -289,6 +315,8 @@ def days_to_bd(name):
 
 @input_error
 def get_birthdays(value=None):
+    ''' Функція виводить перелік іменинників за період '''
+    
     if value.strip() == '':
         period = 7
     else:
@@ -298,6 +326,8 @@ def get_birthdays(value=None):
 
 @input_error
 def change_bd(value):
+    ''' Функція для зміни дня народження контакта '''
+
     name, new_birthday = value.lower().strip().split()
     if name.title() in address_book:
         address_book[name.title()].delete_birthday()
@@ -317,6 +347,8 @@ def search(text_to_search: str):
 
 @input_error
 def add_the_task(value):
+    ''' Функція для додавання завдання в книгу завдань'''
+
     try:
         name, deadline, text = value.lower().strip().split(" ", 2)
         user = ResponsiblePerson(name)
@@ -331,6 +363,8 @@ def add_the_task(value):
 
 @input_error
 def remove_the_task(value):
+    ''' Функція для видалення завдання з книги завдань'''
+
     try:
         Id = int(value.strip())
     except TypeError:
@@ -343,11 +377,15 @@ def remove_the_task(value):
 
 @input_error
 def show_tasks(value):
+    ''' Функція виводить перелік всіх завдань '''
+
     return tasklist.show_all_tasks()
 
 
 @input_error
 def done(value):
+    ''' Функція змінює статус завдання на "Done" '''
+
     try:
         Id = int(value.strip())
     except TypeError:
@@ -361,6 +399,8 @@ def done(value):
 
 @input_error
 def change_d_line(value):
+    ''' Функція змінює дедлайн завдання '''
+
     Id, new_deadline = value.split()
     try:
         Id = int(Id)
@@ -375,12 +415,16 @@ def change_d_line(value):
 
 @input_error
 def search_in_task(text_to_search: str):
+    ''' Шукаємо завдання по тексту '''
+
     text = text_to_search.strip().lower()
     return tasklist.search_task(text)
 
 
 @input_error
 def search_responce(name):
+    ''' Шукаємо завдання по виконавцю '''
+
     name = name.strip().lower()
     return tasklist.search_respons_person(name)
 
@@ -392,6 +436,8 @@ def well_done(id):
 
 @input_error
 def clean_f(path):
+    ''' функція викликає функції що відповідають за сортування файлів в вибраній теці '''
+    
     p = Path(path)
     try:
         create_folders(p)
