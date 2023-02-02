@@ -4,7 +4,7 @@ from .assistant import main
 def short_help():
     commands = """
     You can use commands:
-      - help - hello - good bye - close - .
+      - help - hello - good bye - close - exit - . 
       - currency
       - clean-folder  
     ADDRESS BOOK:
@@ -14,7 +14,7 @@ def short_help():
       - add birthday - remove birthday - change birthday - days to birthday - birthdays
     NOTES BOOK:
       - show notes - note - search notes - search tags
-      - add note - change note - add tags - remove note, 
+      - add note - change note - remove note - add tags - remove note, 
     TASK BOOK:            
       - show tasks - search tasks - responsible person
       - add task - remove task - change deadline - done
