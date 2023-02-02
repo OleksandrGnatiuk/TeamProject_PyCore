@@ -15,4 +15,4 @@ setup(name='assistant_ota',
             'pyttsx3',
             'requests',
             ],
-      entry_points={'console_scripts': ['assistant = cli_assistant.assistant:main']})
+      entry_points={'console_scripts': ['assistant = cli_assistant.help_invite:short_help']})
