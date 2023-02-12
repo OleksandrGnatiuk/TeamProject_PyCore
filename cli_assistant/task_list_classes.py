@@ -72,16 +72,16 @@ class TaskList:
             self.save_to_file()
 
 
-    def show_all_tasks(self):  
-        ''' Виводимо перелік всіх завдань '''
+    # def show_all_tasks(self):  
+    #     ''' Виводимо перелік всіх завдань '''
 
-        result = ' '
-        if len(self.task_lst) > 0:
-            for k, v in self.task_lst.items():
-                result += f"=== ID: {k} === {v.see_task()}\n"
-            return result
-        else:
-            return f"\nTask book is empty.\n"
+    #     result = ' '
+    #     if len(self.task_lst) > 0:
+    #         for k, v in self.task_lst.items():
+    #             result += f"=== ID: {k} === {v.see_task()}\n"
+    #         return result
+    #     else:
+    #         return f"\nTask book is empty.\n"
 
 
     def change_deadline(self, ID, new_deadline):  

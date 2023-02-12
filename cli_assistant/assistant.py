@@ -8,7 +8,8 @@ from .note_book_classes import *
 from .task_list_classes import *
 from .exceptions import *
 from .currency import *
-import pyttsx3
+from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo
+
 
 
 def save_to_pickle():
@@ -52,7 +53,8 @@ def tags(value):
 
 @input_error
 def sh_notes(value):
-    return nb.show_all_notes()
+    notes_info = NotebookInfo()
+    return notes_info.get_info(value)
 
 
 @input_error
@@ -74,15 +76,8 @@ def search_t(tag_to_search):
 
 @input_error
 def note(id_):
-    try:
-        s = pyttsx3.init()
-        data = nb.notes[int(id_)].note
-        s.say(data)
-        s.runAndWait()
-    except Exception:
-        "sound is not available"
-    finally:
-        return nb.show_note(id_)
+    n_info = NoteInfo()
+    return n_info.get_info(id_)
 
 
 @input_error
@@ -115,14 +110,10 @@ def add_contact(value):
 
 @input_error
 def show_all(s):
-    """ Функція виводить всі записи в телефонній книзі при команді 'show all' """
+    """ Функція виводить всі записи в телефонній книзі """
 
-    if len(address_book) == 0:
-        return "\nPhone book is empty.\n"
-    result = ''
-    for record in address_book.values():
-        result += f"{record.contacts()}\n"
-    return result
+    ab_info = AddressBookInfo()
+    return ab_info.get_info(s)
 
 
 @input_error
@@ -177,14 +168,11 @@ def change_ph(value: str):
 
 
 @input_error
-def contact(name):
-    """ Функція відображає номер телефону абонента, ім'я якого було в команді 'phone ...'"""
+def contact(value):
+    """ Функція відображає дані абонента, по імені або номеру телефона '"""
 
-    if name.title() in address_book:
-        record = address_book[name.title()]
-        return record.contacts()
-    else:
-        return f"\nContact {name.title()} does not exist.\n"
+    ci = ContactInfo()
+    return ci.get_info(value)
 
 
 @input_error
@@ -342,7 +330,8 @@ def change_bd(value):
 def search(text_to_search: str):
     """ Search contact where there is 'text_to_search'  """
 
-    return address_book.search_contact(text_to_search)
+    contact_info = ContactInfo()
+    return contact_info.get_info(text_to_search)
 
 
 @input_error
@@ -379,22 +368,8 @@ def remove_the_task(value):
 def show_tasks(value):
     ''' Функція виводить перелік всіх завдань '''
 
-    return tasklist.show_all_tasks()
-
-
-@input_error
-def done(value):
-    ''' Функція змінює статус завдання на "Done" '''
-
-    try:
-        Id = int(value.strip())
-    except TypeError:
-        f"\nPlease white command in format 'task done <ID>'\n"
-    else:
-        if Id in tasklist.task_lst:
-            tasklist.task_lst[Id].well_done()
-            tasklist.save_to_file()
-    return f"\nStatus of task ID: {Id} is 'done'\n"
+    tast_info = TaskbookInfo()
+    return tast_info.get_info(value)
 
 
 @input_error
@@ -536,7 +511,6 @@ handlers = {
     "add address": add_adrs,
     "add task": add_the_task,
     "remove task": remove_the_task,
-    "task done": done,
     "show tasks": show_tasks,
     "change deadline": change_d_line,
     "search tasks": search_in_task,

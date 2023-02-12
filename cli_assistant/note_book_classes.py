@@ -77,17 +77,17 @@ class Notebook:
             pickle.dump(self.notes, fh)
 
 
-    def show_all_notes(self):
-        if len(self.notes) > 0:
-            result = ""
-            for id_, rec in self.notes.items():
-                tgs = [tg.word.lower() for tg in rec.tags]
-                tags = ", ".join(tgs)
-                date = rec.date
-                result += f"\nid: {id_}      date: {date} \n{rec.note}\ntags: {tags} \n=========\n"
-            return result
-        else:
-            return f"\nNotebook is empty.\n"
+    # def show_all_notes(self):
+    #     if len(self.notes) > 0:
+    #         result = ""
+    #         for id_, rec in self.notes.items():
+    #             tgs = [tg.word.lower() for tg in rec.tags]
+    #             tags = ", ".join(tgs)
+    #             date = rec.date
+    #             result += f"\nid: {id_}      date: {date} \n{rec.note}\ntags: {tags} \n=========\n"
+    #         return result
+    #     else:
+    #         return f"\nNotebook is empty.\n"
 
 
     @is_id_exist
