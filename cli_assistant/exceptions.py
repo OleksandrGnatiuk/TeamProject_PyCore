@@ -1,4 +1,4 @@
-
+from address_book_classes import EmailError, WrongLengthPhoneError, LetterInPhoneError
 
 def input_error(func):
     """ Декоратор, що повідомляє про виключення """
@@ -8,12 +8,18 @@ def input_error(func):
             result = func(*args, **kwargs)
             return result
         except KeyError:
-            return "This record is not exist"
+            return "\nThis record is not exist\n"
         except ValueError:
-            return "This record is not correct!"
+            return "\nThis record is not correct!\n"
         except IndexError:
-            return "This command is wrong"
+            return "\nThis command is wrong\n"
+        except LetterInPhoneError:
+            return "\nThere is letter in phone number!\n"
+        except WrongLengthPhoneError:
+            return "\nLength of phone's number is wrong!\n"
+        except EmailError:
+            return "\nE-mail is wrong\n!"
         except Exception:
-            return "Mistake"
+            return "\nMistake\n"
 
     return wrapper

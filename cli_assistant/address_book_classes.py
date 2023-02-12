@@ -5,6 +5,20 @@ from pathlib import Path
 import re
 
 
+
+class WrongLengthPhoneError(Exception):
+    """ Exception for wrong length of the phone number """
+
+
+class LetterInPhoneError(Exception):
+    """ Exception when a letter is in the phone number """
+
+
+class EmailError(Exception):
+    """ Exception for wrong e-mail """
+
+
+
 class Field:
 
     def __init__(self, value):
@@ -35,12 +49,12 @@ class Phone(Field):
         new_phone = str(phone).strip().replace("+", "").replace(" ", "")\
             .replace("(", "").replace(")", "").replace("-", "")
         if not new_phone.isdigit():
-            raise ValueError("The phone number should contain only numbers!")
+            raise LetterInPhoneError("The phone number should contain only numbers!")
         else:
             if len(new_phone) == 10:
                 return f"{new_phone}"
             else:
-                raise ValueError("Check the length of the phone number!")
+                raise WrongLengthPhoneError("Check the length of the phone number!")
 
     def __init__(self, value):
         self._value = Phone.validate_phone(value)
@@ -59,7 +73,7 @@ class Email(Field):
         if re.match(pattern, email) is not None:
             return f"{email}"
         else:
-            raise ValueError("Email is not correct!")
+            raise EmailError("Email is not correct!")
 
     def __init__(self, value):
         self._value = Email.validate_email(value)
