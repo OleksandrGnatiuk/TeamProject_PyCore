@@ -418,7 +418,7 @@ def clean_f(path):
 
 
 def helps(value):
-    return AllCommandInfo.get_info()
+    return AllCommandInfo.get_info(value)
     
 
 handlers = {
