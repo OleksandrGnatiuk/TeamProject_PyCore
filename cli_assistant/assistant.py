@@ -8,7 +8,7 @@ from .note_book_classes import *
 from .task_list_classes import *
 from .exceptions import *
 from .currency import *
-from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo
+from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo, AllCommandInfo
 
 
 
@@ -53,8 +53,7 @@ def tags(value):
 
 @input_error
 def sh_notes(value):
-    notes_info = NotebookInfo()
-    return notes_info.get_info(value)
+    return NotebookInfo.get_info(value)
 
 
 @input_error
@@ -76,8 +75,7 @@ def search_t(tag_to_search):
 
 @input_error
 def note(id_):
-    n_info = NoteInfo()
-    return n_info.get_info(id_)
+    return NoteInfo.get_info(id_)
 
 
 @input_error
@@ -111,9 +109,7 @@ def add_contact(value):
 @input_error
 def show_all(s):
     """ Функція виводить всі записи в телефонній книзі """
-
-    ab_info = AddressBookInfo()
-    return ab_info.get_info(s)
+    return AddressBookInfo.get_info(s)
 
 
 @input_error
@@ -169,10 +165,8 @@ def change_ph(value: str):
 
 @input_error
 def contact(value):
-    """ Функція відображає дані абонента, по імені або номеру телефона '"""
-
-    ci = ContactInfo()
-    return ci.get_info(value)
+    """ Функція відображає дані абонента, по імені або номеру телефона """
+    return ContactInfo.get_info(value)
 
 
 @input_error
@@ -329,9 +323,7 @@ def change_bd(value):
 @input_error
 def search(text_to_search: str):
     """ Search contact where there is 'text_to_search'  """
-
-    contact_info = ContactInfo()
-    return contact_info.get_info(text_to_search)
+    return ContactInfo.get_info(text_to_search)
 
 
 @input_error
@@ -344,7 +336,7 @@ def add_the_task(value):
         task = Task(text, user, deadline)
         tasklist.add_task(task)
         tasklist.save_to_file()
-    except Exception:
+    except TaskFormatError:
         f"\nPlease white command in format 'add task <name> <deadline in format: YYYY-m-d> <task>'\n"
     else:
         return f"\nThe task was created.\n"
@@ -367,9 +359,7 @@ def remove_the_task(value):
 @input_error
 def show_tasks(value):
     ''' Функція виводить перелік всіх завдань '''
-
-    tast_info = TaskbookInfo()
-    return tast_info.get_info(value)
+    return TaskbookInfo.get_info(value)
 
 
 @input_error
@@ -428,53 +418,8 @@ def clean_f(path):
 
 
 def helps(value):
-    rules = """LIST OF COMMANDS: \n
-    1) to add new contact and one or more phones, write command: add contact <name> <phone> <phone> ... <phone>
-    2) to remove contact, write command: remove contact <name>
-    3) to add phone, write command: add phone <name> <one phone>
-    4) to change phone, write command: change phone <name> <old phone> <new phone>
-    5) to remove phone, write command: remove phone <name> <old phone>
-    6) to add e-mail, write command: add email <name> <e-mail>
-    7) to change e-mail, write command: change email <name> <new e-mail>
-    8) to remove e-mail, write command: remove email <name>
-    9) to add address, write command: add address <name> <address>
-    10) to change address, write command: change address <name> <new address>
-    11) to remove address, write command: remove address <name>
-    12) to add birthday of contact, write command: add birthday <name> <dd/mm/yyyy>
-    13) to remove birthday, write command: remove birthday <name>
-    14) to change birthday, write command: change birthday <name> <d/m/yyyy>
-    15) to see how many days to contact's birthday, write command: days to birthday <name>
-    16) to see list of birthdays in period, write command: birthdays <number of days>
-    17) to search contact, where is 'text', write command: search contact <text>
-    18) to see full record of contact, write: phone <name>
-    19) to see all contacts, write command: show addressbook
-    20) to say goodbye, write one of these commands: good bye / close / exit / . 
-    21) to say hello, write command: hello
-    22) to see help, write command: help
+    return AllCommandInfo.get_info()
     
-    23) to sort file in folder, write command: clean-folder <path to folder>
-    
-    24) to add note use command: add note <text>
-    25) to change note use command: change note <id> <edited text>
-    26) to add tags use command: add tags <id> <tag1 tag2 tag3...>
-    27) to show all notes use command: show notes
-    28) to show any note use command: note <id>
-    29) to remove note use command: remove note <id>
-    30) to search notes use command: search notes <text_to_search>
-    31) to search tags use command: search tags <tag_to_search>
-    
-    32)  to add task use command: add task <name of responsible persons> <deadline in format dd/mm/yyyy> <text of task>
-    33) to remove task use command: remove task <ID of task>
-    34) to see all tasks use command: show tasks
-    35) to change deadline of task use command: change deadline <ID of task> <new deadline in format dd/mm/yyyy>
-    36) to search tasks use command: search tasks <text_to_search>
-    37) to search tasks of responsible person use command: responsible person <name>
-    38) to set status of task "done" use command: done <ID of tasl>
-
-    39) to see rate of currency use command: currency <name of currency>: 
-    """
-    return rules
-
 
 handlers = {
     "add note": new_note,
