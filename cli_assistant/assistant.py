@@ -8,7 +8,7 @@ from .note_book_classes import *
 from .task_list_classes import *
 from .exceptions import *
 from .currency import *
-from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo, AllCommandInfo
+from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo, AllCommandInfo, ShortHelpInfo
 
 
 
@@ -419,7 +419,11 @@ def clean_f(path):
 
 def helps(value):
     return AllCommandInfo.get_info(value)
-    
+
+
+def short_help(value):
+    return ShortHelpInfo.get_info(value)
+ 
 
 handlers = {
     "add note": new_note,
@@ -435,6 +439,7 @@ handlers = {
     "close": say_goodbye,
     "exit": say_goodbye,
     "currency": get_curr,
+    "short help": short_help,
     "help": helps,
     "add contact": add_contact,
     "remove contact": remove_contact,
@@ -514,6 +519,7 @@ completer = NestedCompleter.from_nested_dict({
     "clean-folder": {"<path to folder>"},
     "hello": None,
     "help": None,
+    "short help": None,
     "done": {"<ID of task>"},
     "responsible person": {"<name>"},
     "currency": {

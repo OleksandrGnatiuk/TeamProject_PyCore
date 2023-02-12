@@ -40,7 +40,6 @@ class Task:
 
     def see_task(self):
         ''' Виводимо всю актуальну інформацію по завданню в консоль '''
-
         self.is_in_time()
         return f"\nResponsible Person: {self.person.name}      Deadline: {self.deadline.date()}\nTask: {self.text}\nStatus: {self.status}\n==============\n"
 
