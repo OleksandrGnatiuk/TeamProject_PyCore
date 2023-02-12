@@ -1,4 +1,4 @@
-from address_book_classes import EmailError, WrongLengthPhoneError, LetterInPhoneError
+from .address_book_classes import EmailError, WrongLengthPhoneError, LetterInPhoneError
 
 def input_error(func):
     """ Декоратор, що повідомляє про виключення """
