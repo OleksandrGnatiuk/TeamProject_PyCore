@@ -1,5 +1,3 @@
-import pickle
-from pathlib import Path
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import NestedCompleter
 from address_book_classes import *

@@ -10,9 +10,11 @@ packages = [{include = "assistant_ota"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 prompt-toolkit = "^3.0.36"
-pyttsx3 = "^2.90"
 requests = "^2.28.2"
 markdown = "^3.4.1"
+setuptools = "^67.3.3"
+logging = "^0.4.9.6"
+pyttsx3 = "^2.90"
 
 
 [build-system]
