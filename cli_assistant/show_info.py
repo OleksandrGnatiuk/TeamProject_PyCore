@@ -1,9 +1,9 @@
 from abc import abstractmethod, ABC
 import pyttsx3
-from .address_book_classes import *
-from .note_book_classes import *
-from .task_list_classes import *
-from .exceptions import *
+from address_book_classes import *
+from note_book_classes import *
+from task_list_classes import *
+from exceptions import *
 
 
 class AbstractInfo(ABC):

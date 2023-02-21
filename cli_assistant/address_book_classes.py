@@ -3,8 +3,11 @@ from datetime import datetime
 import pickle
 from pathlib import Path
 import re
+from logger_ import get_logger
 
 
+
+logger = get_logger(__name__)
 
 class WrongLengthPhoneError(Exception):
     """ Exception for wrong length of the phone number """
@@ -274,6 +277,7 @@ class AddressBook(UserDict):
         for key, value in sorted_near_birthdays.items():
             s = f"{key}'s birthday will be on {str(value)}\n"
             result += s
+        logger.info('list of birthdays was shown')
         return result
 
 

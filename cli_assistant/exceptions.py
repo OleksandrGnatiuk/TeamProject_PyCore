@@ -1,4 +1,5 @@
-from .address_book_classes import EmailError, WrongLengthPhoneError, LetterInPhoneError
+from address_book_classes import EmailError, WrongLengthPhoneError, LetterInPhoneError
+from functools import wraps
 
 
 class SoundNoteError(Exception):
@@ -11,6 +12,7 @@ class TaskFormatError(Exception):
 def input_error(func):
     """ Декоратор, що повідомляє про виключення """
 
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             result = func(*args, **kwargs)

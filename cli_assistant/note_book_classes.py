@@ -1,11 +1,13 @@
 import pickle
 from datetime import datetime
+from functools import wraps
 
 
 
 def is_id_exist(func):
     """ Decorator checks if id exists and it saves changes to pickle-file """
 
+    @wraps(func)
     def wrapper(*args):
         id_ = args[1]
         if int(id_) in args[0].notes:

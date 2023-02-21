@@ -2,15 +2,17 @@ import pickle
 from pathlib import Path
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import NestedCompleter
-from .address_book_classes import *
-from .clean_folder import create_folders, sort_files, delete_folders, unpack_archives
-from .note_book_classes import *
-from .task_list_classes import *
-from .exceptions import *
-from .currency import *
-from .show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo, AllCommandInfo, ShortHelpInfo
+from address_book_classes import *
+from clean_folder import create_folders, sort_files, delete_folders, unpack_archives
+from note_book_classes import *
+from task_list_classes import *
+from exceptions import *
+from currency import *
+from show_info import ContactInfo, AddressBookInfo, NoteInfo, NotebookInfo, TaskbookInfo, AllCommandInfo, ShortHelpInfo
 
 
+
+logger = get_logger(__name__)
 
 def save_to_pickle():
     """ Save address book in pickle file"""
@@ -31,7 +33,9 @@ def say_goodbye(s=None):
 def new_note(text):
     note_ = RecordNote(text)
     nb.add_new_note(note_)
+    logger.info('added the note')
     nb.save_to_file()
+    logger.info('notes were saved')
     return f"\nThe note was created.\n"
 
 
@@ -39,7 +43,9 @@ def new_note(text):
 def ed_note(value):
     id_, text = value.split(" ", 1)
     nb.to_edit_text(id_, text)
+    logger.info('eddicted the note')
     nb.save_to_file()
+    logger.info('notes were saved')
     return f"\nThe note was changed.\n"
 
 
@@ -47,7 +53,9 @@ def ed_note(value):
 def tags(value):
     id_, *tags_ = value.split()
     nb.to_add_tags(id_, list(tags_))
+    logger.info('added tag')
     nb.save_to_file()
+    logger.info('notes were saved')
     return f"\nTags for note id:{id_} was added.\n"
 
 
@@ -59,7 +67,9 @@ def sh_notes(value):
 @input_error
 def del_notes(id_):
     nb.to_remove_note(id_)
+    logger.info('removed the note')
     nb.save_to_file()
+    logger.info('notes were saved')
     return f'\nNote ID: {id_} was delete.\n'
 
 
@@ -82,6 +92,7 @@ def note(id_):
 def get_curr(value):
     currency = value.strip().upper()
     if currency.isalpha():
+        logger.info('varificated name of currency')
         return get_currency(currency)
     else:
         return "\nYou need write command in format 'currency <name of currency>'\n"
@@ -97,10 +108,13 @@ def add_contact(value):
     if name.value not in address_book:
         record = Record(name)
         address_book.add_record(record)
+        logger.info('contact was added')
         if phones:
             for phone in phones:
                 record.add_phone(phone)
+                logger.info('the phone was added')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nContact {name.value.title()} was created.\n"
     else:
         return f"\nContact {name.value.title()} already exists.\n"
@@ -118,7 +132,9 @@ def remove_contact(name: str):
 
     record = address_book[name.strip().lower().title()]
     address_book.del_record(record.name.value)
+    logger.info('contact was removed')
     save_to_pickle()
+    logger.info('addressbook was saved')
     return f"\nContact {name.title()} was removed.\n"
 
 
@@ -130,7 +146,9 @@ def add_phone(value):
 
     if name.title() in address_book:
         address_book[name.title()].add_phone(phone)
+        logger.info('phone was added')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe phone number for {name.title()} was recorded.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -143,7 +161,9 @@ def remove_phone(value):
 
     if name.title() in address_book:
         address_book[name.title()].delete_phone(phone)
+        logger.info('phone was removed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nPhone for {name.title()} was delete.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -158,7 +178,9 @@ def change_ph(value: str):
     if name.strip().lower().title() in address_book:
         address_book[name.strip().lower().title()].change_phone(
             old_phone, new_phone)
+        logger.info('phone was changed')
         save_to_pickle()
+        logger.info('addressbook was saved')
     else:
         return f"\nContact {name.title()} does not exists\n"
 
@@ -177,7 +199,9 @@ def add_em(value):
     name = name.title()
     if name.title() in address_book:
         address_book[name.title()].add_email(email)
+        logger.info('e-mail was added')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe e-mail for {name.title()} was recorded.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -192,7 +216,9 @@ def remove_em(value):
     email = email.lower()
     if name.title() in address_book:
         address_book[name.title()].delete_email(email)
+        logger.info('e-mail was removed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe e-mail for {name.title()} was delete.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -206,7 +232,9 @@ def change_em(value: str):
 
     if name.strip().lower().title() in address_book:
         address_book[name.strip().lower().title()].change_email(old_em, new_em)
+        logger.info('e-mail was changed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe e-mail for {name.title()} was changed.\n"
     else:
         return f"\nContact {name.title()} does not exists.\n"
@@ -220,7 +248,9 @@ def add_adrs(value):
     name = name.title()
     if name.title() in address_book:
         address_book[name.title()].add_address(address)
+        logger.info('address was added')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe address for {name.title()} was recorded.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -234,7 +264,9 @@ def change_adrs(value):
     name = name.title()
     if name.strip().lower().title() in address_book:
         address_book[name.title()].add_address(address)
+        logger.info('address was changed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nThe address for {name.title()} was changed.\n"
     else:
         return f"\nContact {name.title()} does not exists.\n"
@@ -247,7 +279,9 @@ def remove_adrs(value):
     name = value.lower().title().strip()
     if name.title() in address_book:
         address_book[name.title()].delete_address()
+        logger.info('address was removed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nAddress for {name.title()} was delete.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -261,7 +295,9 @@ def remove_bd(value):
 
     if name.title() in address_book:
         address_book[name.title()].delete_birthday()
+        logger.info('birthday was removed')
         save_to_pickle()
+        logger.info('addressbook was saved')
         return f"\nBirthday for {name.title()} was delete.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -275,7 +311,9 @@ def add_contact_birthday(value):
 
     if name.title() in address_book:
         address_book[name.title()].add_birthday(birthday)
+        logger.info('birthday was added')
         save_to_pickle()
+        logger.info('contact was saved')
         return f"\nThe Birthday for {name.title()} was recorded.\n"
     else:
         return f"\nContact {name.title()} does not exists.\n"
@@ -288,6 +326,7 @@ def days_to_bd(name):
     if name.title() in address_book:
         if not address_book[name.title()].birthday is None:
             days = address_book[name.title()].days_to_birthday()
+            logger.info('got days to birthday')
             return days
         else:
             return f"\n{name.title()}'s birthday is unknown.\n"
@@ -314,7 +353,9 @@ def change_bd(value):
     if name.title() in address_book:
         address_book[name.title()].delete_birthday()
         address_book[name.title()].add_birthday(new_birthday)
+        logger.info('birthday was changed')
         save_to_pickle()
+        logger.info('contact was saved')
         return f"\nBirthday for {name.title()} was changed.\n"
     else:
         return f"\nContact {name.title()} does not exist.\n"
@@ -335,7 +376,9 @@ def add_the_task(value):
         user = ResponsiblePerson(name)
         task = Task(text, user, deadline)
         tasklist.add_task(task)
+        logger.info('task was added')
         tasklist.save_to_file()
+        logger.info('taskbook was saved')
     except TaskFormatError:
         f"\nPlease white command in format 'add task <name> <deadline in format: YYYY-m-d> <task>'\n"
     else:
@@ -352,7 +395,9 @@ def remove_the_task(value):
         f"\nPlease white command in format 'remove task <ID>'\n"
     else:
         tasklist.remove_task(Id)
+        logger.info('task was removed')
         tasklist.save_to_file()
+        logger.info('taskbook was saved')
         return f"\nThe task was delete\n"
 
 
@@ -374,7 +419,9 @@ def change_d_line(value):
     else:
         if Id in tasklist.task_lst:
             tasklist.change_deadline(Id, new_deadline)
+            logger.info('deadline was changed')
             tasklist.save_to_file()
+            logger.info('taskbook was saved')
     return f"\nDeadline for task ID: {Id} was changed.\n"
 
 
@@ -406,14 +453,19 @@ def clean_f(path):
     p = Path(path)
     try:
         create_folders(p)
+        logger.info('folders were created')
     except FileNotFoundError:
+        logger.error('The folder was not found')
         print(
             "\nThe folder was not found. Check the folder's path and run the command again!.\n"
         )
     else:
         sort_files(p)
+        logger.info('sorted files')
         delete_folders(p)
+        logger.info('removed empty folders')
         unpack_archives(p)
+        logger.info('archives were unpacked')
         return "Done\n"
 
 
@@ -550,4 +602,5 @@ def main():
 
 
 if __name__ == "__main__":
+    logger.debug("start program")
     main()
