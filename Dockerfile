@@ -7,5 +7,3 @@ COPY . .
 RUN pip install -r requirements.txt
 
 ENTRYPOINT ["python", "cli_assistant/help_invite.py"]
-
-VOLUME ./data:/data
