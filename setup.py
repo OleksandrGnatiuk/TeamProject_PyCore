@@ -10,9 +10,9 @@ setup(name='assistant_ota',
       license='MIT',
       packages=find_packages(),
       install_requires=[
-            'markdown',
-            'prompt_toolkit',
-            'pyttsx3',
-            'requests',
+            'markdown==3.4.1',
+            'prompt-toolkit==3.0.36',
+            'requests==2.28.2',
+            'logging==0.4.9.6',
             ],
-      entry_points={'console_scripts': ['assistant = cli_assistant.assistant:main']})
+      entry_points={'console_scripts': ['assistant = cli_assistant.help_invite:short_help']})

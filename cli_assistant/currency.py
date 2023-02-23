@@ -3,7 +3,9 @@ from datetime import datetime
 import requests
 
 
+
 def get_currency(currencyname):
+    ''' Функція для отримання курсу вибраної валюти по Get - запиту '''
     try:
         today = datetime.now().strftime("%Y%m%d")
         URL = 'https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?valcode=' + currencyname + '&date=' + today + '&json'
