@@ -7,14 +7,13 @@ from exceptions import *
 
 
 class AbstractInfo(ABC):
-
     @abstractmethod
     def get_info(data):
         pass
 
 
 class ContactInfo(AbstractInfo):
-    """ Клас виводить інформацію по імені, або телефону контакту """
+    """Клас виводить інформацію по імені, або телефону контакту"""
 
     def get_info(text_to_search: str):
         text_to_search = text_to_search.strip()
@@ -26,7 +25,11 @@ class ContactInfo(AbstractInfo):
             else:
                 return f"\nContact {name.title()} does not exist.\n"
 
-        elif text_to_search[0].isdigit() or text_to_search[0] in ("+", "(") and text_to_search[1].isdigit():
+        elif (
+            text_to_search[0].isdigit()
+            or text_to_search[0] in ("+", "(")
+            and text_to_search[1].isdigit()
+        ):
             phone = Phone.validate_phone(text_to_search)
             for record in address_book.values():
                 lst = [phone.value for phone in record.phones]
@@ -36,9 +39,8 @@ class ContactInfo(AbstractInfo):
                     return f"\nContact with phone number {text_to_search} does not exist.\n"
 
 
-
 class AddressBookInfo(AbstractInfo):
-    """ Клас виводить всі записи книги контактів """
+    """Клас виводить всі записи книги контактів"""
 
     def get_info(data):
         if len(address_book) == 0:
@@ -52,7 +54,8 @@ class AddressBookInfo(AbstractInfo):
 
 
 class NoteInfo(AbstractInfo):
-    """ Клас виводить та озвучує нотатку по ії ID"""
+    """Клас виводить та озвучує нотатку по ії ID"""
+
     def get_info(id):
         try:
             s = pyttsx3.init()
@@ -81,7 +84,7 @@ class NotebookInfo(AbstractInfo):
 
 class TaskbookInfo(AbstractInfo):
     def get_info(data):
-        result = '\n'
+        result = "\n"
         if len(tasklist.task_lst) > 0:
             for k, v in tasklist.task_lst.items():
                 result += f"=== ID: {k} === {v.see_task()}\n"

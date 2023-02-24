@@ -3,9 +3,8 @@ from datetime import datetime
 from functools import wraps
 
 
-
 def is_id_exist(func):
-    """ Decorator checks if id exists and it saves changes to pickle-file """
+    """Decorator checks if id exists and it saves changes to pickle-file"""
 
     @wraps(func)
     def wrapper(*args):
@@ -16,8 +15,8 @@ def is_id_exist(func):
             return result
         else:
             return f"\nThe note with ID: {id_} is not exists\n"
-    return wrapper
 
+    return wrapper
 
 
 class Tag:
@@ -25,7 +24,6 @@ class Tag:
 
     def __init__(self, word):
         self.word = word.lower()
-
 
 
 class RecordNote:
@@ -56,12 +54,10 @@ class Notebook:
         self.notes = {}
         self.read_from_file()
 
-
     def add_new_note(self, note: RecordNote):
-        self.notes[self.counter+1] = note
+        self.notes[self.counter + 1] = note
         self.counter += 1
         self.save_to_file()
-
 
     def read_from_file(self):
         try:
@@ -73,11 +69,9 @@ class Notebook:
             self.notes = {}
             self.counter = 0
 
-
     def save_to_file(self):
         with open("notes.bin", "wb") as fh:
             pickle.dump(self.notes, fh)
-
 
     # def show_all_notes(self):
     #     if len(self.notes) > 0:
@@ -91,29 +85,24 @@ class Notebook:
     #     else:
     #         return f"\nNotebook is empty.\n"
 
-
     @is_id_exist
     def to_edit_text(self, id_, text_):
         self.notes[int(id_)].edit_text(text_)
 
-
     @is_id_exist
     def to_add_tags(self, id_, tags: list[str]):
         self.notes[int(id_)].add_tags(tags)
-
 
     @is_id_exist
     def to_remove_note(self, id_):
         del self.notes[int(id_)]
         return f"\nThe note id:{id_} was delete!\n"
 
-
     @is_id_exist
     def show_note(self, id_):
         tgs = [tg.word.lower() for tg in self.notes[int(id_)].tags]
         tags = ", ".join(tgs)
         return f"\nid: {id_}     date: {self.notes[int(id_)].date} \n{self.notes[int(id_)].note}\ntags: {tags} \n========\n "
-
 
     def search_note(self, text_to_search: str):
         for id_, value in self.notes.items():
@@ -122,7 +111,6 @@ class Notebook:
                 tags = ", ".join(tgs)
                 result = f"=== id: {id_} ===   date: {value.date} \n{value.note}\ntags: {tags} \n========\n "
                 print(result)
-
 
     def search_tag(self, tag_to_search: str):
         for id_, value in self.notes.items():

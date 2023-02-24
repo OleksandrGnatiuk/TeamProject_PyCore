@@ -5,11 +5,11 @@ log_format = (
 )
 
 file_handler = logging.FileHandler("data/application.log")
-file_handler.setLevel(logging.DEBUG)     # для реліза необхідно змінити на ERROR
+file_handler.setLevel(logging.DEBUG)  # для реліза необхідно змінити на ERROR
 file_handler.setFormatter(logging.Formatter(log_format))
 
 stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.ERROR)   # для дебага потрібно змінити на DEBUG
+stream_handler.setLevel(logging.ERROR)  # для дебага потрібно змінити на DEBUG
 stream_handler.setFormatter(logging.Formatter(log_format))
 
 
